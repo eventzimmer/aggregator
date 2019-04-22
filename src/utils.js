@@ -17,6 +17,7 @@
  */
 const process = require('process')
 const request = require('request')
+const redis = require('redis')
 
 // NOTE: See https://stackoverflow.com/questions/38073527/request-how-to-set-user-agent-for-every-request/38074818#38074818
 const customHeaderRequest = request.defaults({
@@ -26,3 +27,20 @@ const customHeaderRequest = request.defaults({
 })
 
 exports.customHeaderRequest = customHeaderRequest
+
+/**
+ * Returns an instance of the database.
+ * @function
+ * @return redis.RedisClient
+ */
+function createClient() {
+  let client = redis.createClient({
+    url: process.env.REDIS_URL
+  })
+  client.on('error', (err) => {
+    global.logger.error(err)
+  })
+  return client
+}
+
+exports.createClient = createClient
