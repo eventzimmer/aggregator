@@ -1,0 +1,162 @@
+{
+  "edges": [{
+	"is_hidden_on_profile_calendar": false,
+	"is_added_to_profile_calendar": false,
+	"node": {
+		"id": "2104044649828163",
+		"start_timestamp_for_display": 1526760000,
+		"time_range": {
+			"start": "2018-05-19T22:00:00+0200"
+		},
+		"timezone": "Europe/Berlin",
+		"happens_on_single_day": true,
+		"child_events": {
+			"count": 0
+		},
+		"is_event_draft": false,
+		"scheduled_publish_timestamp": 0,
+		"_start_time_sentence1O6R8p": "Sa 22:00 UTC+02",
+		"_start_time_sentence2NYWoJ": "Samstag, 19. Mai",
+		"_suggested_event_context_sentence2eg3eg": {
+			"text": "111 Gäste"
+		},
+		"event_place": {
+			"contextual_name": "Bierkeller Tübingen",
+			"__typename": "Page",
+			"city": {
+				"contextual_name": "Tübingen",
+				"id": "110776595613900"
+			},
+			"id": "823159777764885",
+			"name": "Bierkeller Tübingen",
+			"url": "https://www.facebook.com/BierkellerTuebingen/"
+		},
+		"event_viewer_capability": {
+			"is_viewer_admin": false,
+			"_is_viewer_admin1hS8xA": false,
+			"can_viewer_edit": false,
+			"can_viewer_share": false,
+			"can_viewer_create_repeat_event": false,
+			"can_viewer_watch": false
+		},
+		"is_canceled": false,
+		"imported_source_name": null,
+		"_preassigned_discount_note38LKzn": null,
+		"name": "Headbanger`s Metal Party - Bang your Head!!! Warm-up Party",
+		"event_buy_ticket_url": null,
+		"can_viewer_purchase_onsite_tickets": false,
+		"tickets_type": "ONSITE_TICKET",
+		"can_viewer_join": false,
+		"is_past": false,
+		"connection_style": "INTERESTED",
+		"viewer_watch_status": "UNWATCHED"
+	},
+	"cursor": "AQHRRl3v3Kcr3zG_X69fxnBx2dEQFmakr7syGuwoZ9_TKCouNORSWUGM59lozr4zJKX80iIzZkukD7HZUxxgDxvlBw"
+}, {
+	"is_hidden_on_profile_calendar": false,
+	"is_added_to_profile_calendar": false,
+	"node": {
+		"id": "188816898417629",
+		"start_timestamp_for_display": 1527278400,
+		"time_range": {
+			"start": "2018-05-25T22:00:00+0200"
+		},
+		"timezone": "Europe/Berlin",
+		"happens_on_single_day": true,
+		"child_events": {
+			"count": 0
+		},
+		"is_event_draft": false,
+		"scheduled_publish_timestamp": 0,
+		"_start_time_sentence1O6R8p": "Fr 22:00 UTC+02",
+		"_start_time_sentence2NYWoJ": "Freitag, 25. Mai",
+		"_suggested_event_context_sentence2eg3eg": {
+			"text": "98 Gäste"
+		},
+		"event_place": {
+			"contextual_name": "Bierkeller Tübingen",
+			"__typename": "Page",
+			"city": {
+				"contextual_name": "Tübingen",
+				"id": "110776595613900"
+			},
+			"id": "823159777764885",
+			"name": "Bierkeller Tübingen",
+			"url": "https://www.facebook.com/BierkellerTuebingen/"
+		},
+		"event_viewer_capability": {
+			"is_viewer_admin": false,
+			"_is_viewer_admin1hS8xA": false,
+			"can_viewer_edit": false,
+			"can_viewer_share": false,
+			"can_viewer_create_repeat_event": false,
+			"can_viewer_watch": false
+		},
+		"is_canceled": false,
+		"imported_source_name": null,
+		"_preassigned_discount_note38LKzn": null,
+		"name": "SchwarzVergleich",
+		"event_buy_ticket_url": null,
+		"can_viewer_purchase_onsite_tickets": false,
+		"tickets_type": "ONSITE_TICKET",
+		"can_viewer_join": false,
+		"is_past": false,
+		"connection_style": "INTERESTED",
+		"viewer_watch_status": "UNWATCHED"
+	},
+	"cursor": "AQHRhTAJuzizwCQvRLlJLDm8iNx6DyaGXd_dk0lwGA84CUAk_zBYh1fMwg_OhzOlPYXm09z9FOs0h2TQxIP1uhRjBQ"
+}, {
+	"is_hidden_on_profile_calendar": false,
+	"is_added_to_profile_calendar": false,
+	"node": {
+		"id": "903527196439201",
+		"start_timestamp_for_display": 1530388800,
+		"time_range": {
+			"start": "2018-06-30T22:00:00+0200"
+		},
+		"timezone": "Europe/Berlin",
+		"happens_on_single_day": true,
+		"child_events": {
+			"count": 0
+		},
+		"is_event_draft": false,
+		"scheduled_publish_timestamp": 0,
+		"_start_time_sentence1O6R8p": "Sa 22:00 UTC+02",
+		"_start_time_sentence2NYWoJ": "Samstag, 30. Juni",
+		"_suggested_event_context_sentence2eg3eg": {
+			"text": "84 Gäste"
+		},
+		"event_place": {
+			"contextual_name": "Bierkeller Tübingen",
+			"__typename": "Page",
+			"city": {
+				"contextual_name": "Tübingen",
+				"id": "110776595613900"
+			},
+			"id": "823159777764885",
+			"name": "Bierkeller Tübingen",
+			"url": "https://www.facebook.com/BierkellerTuebingen/"
+		},
+		"event_viewer_capability": {
+			"is_viewer_admin": false,
+			"_is_viewer_admin1hS8xA": false,
+			"can_viewer_edit": false,
+			"can_viewer_share": false,
+			"can_viewer_create_repeat_event": false,
+			"can_viewer_watch": false
+		},
+		"is_canceled": false,
+		"imported_source_name": null,
+		"_preassigned_discount_note38LKzn": null,
+		"name": "Metal Oldies Party",
+		"event_buy_ticket_url": null,
+		"can_viewer_purchase_onsite_tickets": false,
+		"tickets_type": "ONSITE_TICKET",
+		"can_viewer_join": false,
+		"is_past": false,
+		"connection_style": "INTERESTED",
+		"viewer_watch_status": "UNWATCHED"
+	},
+	"cursor": "AQHReKKhn5GPueA0s4VaKTkIWIlki_VMWgntWbjdJESf5HgqiLDVzbh6-c_1sYwl-ohe_yeBUP3U4dic1mScTZmJ8g"
+}]
+}
