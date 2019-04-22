@@ -26,7 +26,7 @@ exports.handler = function () {
                     let token = body.access_token
 
                     let client = createClient()
-                    client.set('access_token', token, 'EX', 36000, (err, result) => {
+                    client.set('access_token', token, 'EX', 35000, (err, result) => {
                         if (err) {
                             throw(err)
                         } else {
