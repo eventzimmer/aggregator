@@ -74,14 +74,12 @@ function transFormToEventDetails (source) {
     if (queries.length) {
       resolve({
         description: queries.shift().data.event.details.text,
-        images: [images.shift().url],
-        tags: []
+        images: [images.shift().url]
       })
     } else {
       resolve({
         description: '',
-        images: [images.shift().url],
-        tags: []
+        images: [images.shift().url]
       })
     }
   })
@@ -102,7 +100,6 @@ function transFormToEvent (data) {
       date: new Date(data.time_range.start),
       url: `${EVENT_URL}${data.id}`,
       location: data.event_place.name,
-      entity: data.event_place.name,
       city: data.event_place.city.contextual_name
     })
   })

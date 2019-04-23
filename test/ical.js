@@ -42,8 +42,6 @@ describe('iCal', function () {
             expect(event.url).to.be.a('string')
             expect(event.date).to.be.a('date')
             expect(event.location).to.be.a('string')
-            expect(event.entity).to.be.a('string')
-            // expect(event.tags).to.be.a('string')
             // expect(event.images).to.be.a('string')
             done()
           }).catch((err) => {
