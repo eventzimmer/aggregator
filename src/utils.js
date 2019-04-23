@@ -51,7 +51,7 @@ exports.createClient = createClient
  * @param {String} url
  * @return {Promise<any>}
  */
-function loadTSVFromUrl(url) {
+function loadTSVFromUrl (url) {
   return customHeaderRequest(url).then((body) => {
     let lines = body.split('\n')
     return Promise.resolve(lines.slice(1).map((e) => e.split('\t')))

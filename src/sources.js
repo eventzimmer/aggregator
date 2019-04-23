@@ -7,7 +7,7 @@ const { promisify } = require('util')
  * @function
  * @return {Promise<Object>}
  */
-function currentSource() {
+function currentSource () {
   return new Promise((resolve, reject) => {
     const client = createClient()
     const llenAsync = promisify(client.llen).bind(client)

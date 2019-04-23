@@ -26,14 +26,14 @@ exports.handler = function () {
       const token = body.access_token
       return setAsync('access_token', token, 'EX', 35000)
     })
-    .then(() => {
-      global.logger.info('Successfully updated access token.')
-      client.quit()
-    })
-    .catch((err) => {
-      global.logger.error(err)
-      client.quit()
-    })
+      .then(() => {
+        global.logger.info('Successfully updated access token.')
+        client.quit()
+      })
+      .catch((err) => {
+        global.logger.error(err)
+        client.quit()
+      })
   } else {
     global.logger.warn('CLIENT_ID or CLIENT_SECRET not specified!')
   }
