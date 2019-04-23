@@ -15,9 +15,7 @@ exports.builder = {
 exports.handler = function (argv) {
   puppeteer.recordResponses(argv.url).then((responses) => {
     console.log(JSON.stringify(responses))
-    process.exit()
   }).catch((err) => {
     console.error(err)
-    process.exit()
   })
 }

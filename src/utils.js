@@ -33,9 +33,9 @@ exports.customHeaderRequest = customHeaderRequest
  * @function
  * @return redis.RedisClient
  */
-function createClient() {
+function createClient () {
   let client = redis.createClient({
-    url: process.env.REDIS_URL
+    url: (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL : 'redis://localhost:6379/1'
   })
   client.on('error', (err) => {
     global.logger.error(err)
