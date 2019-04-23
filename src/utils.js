@@ -52,19 +52,9 @@ exports.createClient = createClient
  * @return {Promise<any>}
  */
 function loadTSVFromUrl(url) {
-  return new Promise((resolve, reject) => {
-    customHeaderRequest(url, {}, (err, response, body) => {
-      if (err) {
-        reject(err)
-      } else {
-        if (response.statusCode === 200) {
-          let lines = body.split('\n')
-          resolve(lines.slice(1).map((e) => e.split('\t')))
-        } else {
-          reject(response.statusCode)
-        }
-      }
-    })
+  return customHeaderRequest(url).then((body) => {
+    let lines = body.split('\n')
+    return Promise.resolve(lines.slice(1).map((e) => e.split('\t')))
   })
 }
 
