@@ -1,6 +1,7 @@
 const process = require('process')
+const { promisify } = require('util')
 const request = require('./utils').customHeaderRequest
-const createClient = require('./utils').createClient
+const { createClient } = require('./utils')
 
 const ENDPOINT_URL = (process.env.ENDPOINT_URL !== undefined) ? process.env.ENDPOINT_URL : 'http://localhost:8080/v1'
 
@@ -12,35 +13,30 @@ const ENDPOINT_URL = (process.env.ENDPOINT_URL !== undefined) ? process.env.ENDP
  */
 function createEvents (events) {
   return new Promise((resolve, reject) => {
-    let client = createClient()
-    client.get('access_token', (err, response) => {
-      if (err !== null) {
-        reject(err)
+    const client = createClient()
+    const getAsync = promisify(client.get).bind(client)
+    getAsync('access_token').then((response) => {
+      return Promise.resolve((response === null) ? 'testToken' : response)
+    }).then((token) => {
+      return request.post(`${ENDPOINT_URL}/events`, {
+        auth: {
+          bearer: token
+        },
+        method: 'POST',
+        body: JSON.stringify(events),
+        headers: { 'Content-Type': 'application/json' },
+        resolveWithFullResponse: true
+      })
+    }).then((response) => {
+      client.quit()
+      if (response.statusCode === 201) {
+        resolve(response.body)
       } else {
-        if (response === null) { // Assume that we're in local mode.
-          response = 'testToken'
-        }
-
-        request(`${ENDPOINT_URL}/events`, {
-          auth: {
-            bearer: response
-          },
-          method: 'POST',
-          body: JSON.stringify(events),
-          headers: { 'Content-Type': 'application/json' }
-        }, (err, response, body) => {
-          if (err) {
-            reject(err)
-          } else {
-            if (response.statusCode === 201) {
-              client.quit()
-              resolve(body)
-            } else {
-              reject(body)
-            }
-          }
-        })
+        reject(response.body)
       }
+    }).catch((err) => {
+      client.quit()
+      reject(err)
     })
   })
 }

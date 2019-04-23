@@ -25,6 +25,7 @@
     "puppeteer": "^1.14.0",
     "redis": "^2.8.0",
     "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
     "yargs": "^13.2.2"
   },
   "devDependencies": {
@@ -33,6 +34,8 @@
     "standard": "^12.0.1"
   },
   "standard": {
-    "env": [ "mocha" ]
+    "env": [
+      "mocha"
+    ]
   }
 }

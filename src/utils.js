@@ -16,7 +16,7 @@
  *  After this, the final step is to add events to the API
  */
 const process = require('process')
-const request = require('request')
+const request = require('request-promise-native')
 const redis = require('redis')
 
 // NOTE: See https://stackoverflow.com/questions/38073527/request-how-to-set-user-agent-for-every-request/38074818#38074818

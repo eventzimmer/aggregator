@@ -19,7 +19,7 @@ exports.handler = function () {
       let events = JSON.parse(lines.join('\n'))
       endpoint.createEvents(events).then((body) => {
         global.logger.debug(body)
-        global.logger.info(`Successfull created ${events.length} events.`)
+        global.logger.info(`Successfully created ${events.length} events.`)
       }).catch((err) => global.logger.error(err))
     } catch (err) {
       global.logger.error(err)
