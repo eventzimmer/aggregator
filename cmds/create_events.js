@@ -6,7 +6,7 @@ exports.command = 'create_events'
 
 exports.describe = 'Creates events from a JSON object.'
 
-exports.handler = function (argv) {
+exports.handler = function () {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout

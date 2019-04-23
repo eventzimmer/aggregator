@@ -31,7 +31,7 @@ exports.customHeaderRequest = customHeaderRequest
 /**
  * Returns an instance of the database.
  * @function
- * @return redis.RedisClient
+ * @return RedisClient
  */
 function createClient () {
   let client = redis.createClient({
@@ -44,3 +44,40 @@ function createClient () {
 }
 
 exports.createClient = createClient
+
+/**
+ * Returns a parsed TSV from the URL
+ * @function
+ * @param {String} url
+ * @return {Promise<any>}
+ */
+function loadTSVFromUrl(url) {
+  return new Promise((resolve, reject) => {
+    customHeaderRequest(url, {}, (err, response, body) => {
+      if (err) {
+        reject(err)
+      } else {
+        if (response.statusCode === 200) {
+          let lines = body.split('\n')
+          resolve(lines.slice(1).map((e) => e.split('\t')))
+        } else {
+          reject(response.statusCode)
+        }
+      }
+    })
+  })
+}
+
+exports.loadTSVFromUrl = loadTSVFromUrl
+
+/**
+ * Where to find the locations JSON
+ * @type {string}
+ */
+exports.LOCATIONS_URL = 'https://raw.githubusercontent.com/eventzimmer/schema/master/eventzimmer_locations.tsv'
+
+/**
+ * Where to find the sources JSON
+ * @type {string}
+ */
+exports.SOURCES_URL = 'https://raw.githubusercontent.com/eventzimmer/schema/master/eventzimmer_sources.tsv'
