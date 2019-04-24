@@ -1,4 +1,4 @@
-const puppeteer = require('./puppeteer')
+const { recordResponses } = require('./puppeteer')
 const GRAPHQL_URL = 'https://www.facebook.com/api/graphql/'
 const EVENT_URL = 'https://facebook.com/events/'
 const SCONTENT_URL = 'https://scontent'
@@ -9,7 +9,7 @@ const SCONTENT_URL = 'https://scontent'
  * @return {Promise<Object>}
  */
 function loadFromSource (url) {
-  return puppeteer.recordResponses(url)
+  return recordResponses(url)
 }
 
 exports.loadFromSource = loadFromSource

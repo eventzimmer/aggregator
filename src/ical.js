@@ -1,5 +1,5 @@
 const request = require('../src/utils').customHeaderRequest
-const iCal = require('ical.js')
+const { parse, Component, Event } = require('ical.js')
 
 /**
  * Loads an iCalendar source
@@ -25,13 +25,13 @@ exports.loadFromSource = loadFromSource
  * @function
  * @param {String} source
  * @see {@link http://mozilla-comm.github.io/ical.js/api/ICAL.Component.html}
- * @return {Promise<Array<ICAL.Component>>}
+ * @return {Promise<Array<Component>>}
  */
 function transFormToEventList (source) {
   return new Promise((resolve, reject) => {
     try {
-      let vData = iCal.parse(source)
-      let calendar = new iCal.Component(vData)
+      let vData = parse(source)
+      let calendar = new Component(vData)
       resolve(calendar.getAllSubcomponents())
     } catch (err) {
       reject(err)
@@ -44,12 +44,12 @@ exports.transFormToEventList = transFormToEventList
 /**
  * Takes a VEVENT object and returns an event
  * @function
- * @param {ICAL.Component} source
+ * @param {Component} source
  * @return {Promise<Object>}
  */
 function transFormToEvent (source) {
   return new Promise((resolve, reject) => {
-    let event = new iCal.Event(source)
+    let event = new Event(source)
     let parentOrganizer = event.component.parent.getFirstPropertyValue('x-wr-calname')
 
     resolve({

@@ -1,4 +1,4 @@
-const puppeteer = require('../src/puppeteer')
+const { recordResponses } = require('../src/puppeteer')
 
 exports.command = 'create_archive <url>'
 
@@ -13,7 +13,7 @@ exports.builder = {
 }
 
 exports.handler = function (argv) {
-  puppeteer.recordResponses(argv.url).then((responses) => {
+  recordResponses(argv.url).then((responses) => {
     console.log(JSON.stringify(responses))
   }).catch((err) => {
     console.error(err)

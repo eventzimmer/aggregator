@@ -1,6 +1,6 @@
 const readline = require('readline')
 const process = require('process')
-const endpoint = require('../src/endpoint')
+const { createEvents } = require('../src/endpoint')
 
 exports.command = 'create_events'
 
@@ -17,7 +17,7 @@ exports.handler = function () {
   rl.on('close', () => {
     try {
       let events = JSON.parse(lines.join('\n'))
-      endpoint.createEvents(events).then((body) => {
+      createEvents(events).then((body) => {
         global.logger.debug(body)
         global.logger.info(`Successfully created ${events.length} events.`)
       }).catch((err) => global.logger.error(err))
