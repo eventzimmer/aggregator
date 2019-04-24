@@ -38,7 +38,7 @@ function createClient () {
     url: (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL : 'redis://localhost:6379/1'
   })
   client.on('error', (err) => {
-    global.logger.error(err)
+    console.error(err)
   })
   return client
 }

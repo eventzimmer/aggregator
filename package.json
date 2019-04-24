@@ -2,8 +2,9 @@
   "name": "@eventzimmer/aggregator",
   "version": "1.0.0",
   "description": "An aggregator for the eventzimmer event service.",
-  "main": "index.js",
+  "main": "worker.js",
   "scripts": {
+    "lint": "standard",
     "test": "mocha"
   },
   "repository": {
@@ -13,6 +14,7 @@
   "keywords": [
     "aggregator"
   ],
+  "private": true,
   "author": "Eventzimmer <info@eventzimmer.de>",
   "license": "MIT",
   "bugs": {
@@ -26,8 +28,7 @@
     "puppeteer": "^1.14.0",
     "redis": "^2.8.0",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "yargs": "^13.2.2"
+    "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
     "chai": "^4.2.0",
