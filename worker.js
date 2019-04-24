@@ -1,4 +1,6 @@
-const Queue = require('bull');
+const { promisify } = require('util')
+
+const Queue = require('bull')
 const bunyan = require('bunyan')
 
 const { createClient } = require('./src/utils')
@@ -29,63 +31,79 @@ tokenQueue.process(async (job) => {
 logger.info(`Initializing event queue`)
 const eventQueue = new Queue('events', REDIS_URL)
 
-eventQueue.process(async(job) => {
+eventQueue.process(1,async(job) => {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
   const saddAsync = promisify(client.sadd).bind(client)
   let event = job.data
+  console.log(event)
+  logger.debug(`Received event with url ${event.url}`)
 
-  return Promise.all([
-    loadTSVFromUrl(SOURCES_URL), // Verify that event source is in sources
-    loadTSVFromUrl(LOCATIONS_URL), // Verify that event location is in locations
-    sismemberAsync('processed_events', event.url) // Verify has not been processed before
-  ]).then((checks) => { // Check event
-    if (checks[0].find((s) => s[1] === event.source) === undefined) {
-      return Promise.reject(`Cannot find source ${event.source} in list of sources.`)
-    } else if (checks[1].find((l) => l[0]) === undefined) {
-      return Promise.reject(`Cannot find location ${event.location} in list of locations.`)
-    } else if (checks[2]) {
-      return Promise.reject(`Event with url ${event.url} has been processed before.`)
+  /*sismemberAsync('processed_events', event.url).then(() => { // Check if it has been processed before
+    if (event.id !== undefined) {
+      return facebook.loadFromSource(event.url)
+          .then((archive) => facebook.transFormToEventDetails(archive))
+          .then((details) => Promise.resolve({
+            ...event,
+            ...details
+          }))
     } else {
       return Promise.resolve(event)
     }
-  }).then((event) => { // If Facebook => get more event details
-
-  }).then((event) => { // Add event
+  }).then((event) => { // Add event to endpoint and processed events
+    console.log(event)
     return Promise.all([
         createEvents([event]),
         saddAsync('processed_events', event.url)
     ])
   }).catch((err) => {
+    console.log("HEY4?")
     client.quit()
+    logger.error(err)
     return Promise.reject(err)
-  })
+  })*/
 })
 
 
 logger.info(`Initializing sources queue.`)
 const sourcesQueue = new Queue('sources', REDIS_URL)
-sourcesQueue.on('error', (err) => logger.error(err))
 
 sourcesQueue.process(async (job) => {
   return currentSource().then((source) => {
     source = JSON.parse(source)
     logger.info(`Fetching source of type ${source[0]} with URL ${source[1]}`)
     if (source[0] === 'Facebook') {
-      return facebook.loadFromSource(source[1]).then((items) => facebook.transFormToEventList(items))
+      return Promise.all([
+        Promise.resolve(source),
+        facebook.loadFromSource(source[1])
+          .then((archive) => facebook.transFormToEventList(archive))
+          .then((items) => Promise.all(items.map((item) => facebook.transFormToEvent(item))))
+      ])
     } else if (source[0] === 'iCal') {
-      return iCal.loadFromSource(source[1])
-          .then((items) => iCal.transFormToEventList(items))
+      return Promise.all([
+        Promise.resolve(source),
+        iCal.loadFromSource(source[1])
+          .then((archive) => iCal.transFormToEventList(archive))
           .then((components) => Promise.all(components.map((component) => iCal.transFormToEvent(component))))
+      ])
     } else {
       return Promise.reject(`Source of type ${source[0]} is currently not supported.`)
     }
-  }).then((events) => {
-    return Promise.all(events.map((e) => eventQueue.add(e)))
+  }).then((results) => {
+    console.log(results)
+    let source = { aggregator: results[0][0], url: results[0][1] }
+    let events = results[1].map((e) => {
+      e.source = source
+      return e
+    })
+    logger.debug(`Fetched ${events.length} events and added them to the queue.`)
+    return Promise.resolve(events.map((e) => eventQueue.add(e)))
   }).catch((err) => {
+    logger.error(err)
     return Promise.reject(new Error(err))
   })
 })
 
 tokenQueue.add({}, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-sourcesQueue.add({}, { repeat: { cron: '0 9-21 * * *' }}) // Hourly during 9am and 9pm every day
+//sourcesQueue.add({}, { repeat: { cron: '0 9-21 * * *' }}) // Hourly during 9am and 9pm every day
+sourcesQueue.add({})
