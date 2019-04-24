@@ -4,6 +4,7 @@ const request = require('./utils').customHeaderRequest
 const { createClient } = require('./utils')
 
 const ENDPOINT_URL = (process.env.ENDPOINT_URL !== undefined) ? process.env.ENDPOINT_URL : 'http://localhost:8080/v1'
+const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
 
 /**
  * Submits a list of events to the API server using credentials.
@@ -42,3 +43,39 @@ function createEvents (events) {
 }
 
 exports.createEvents = createEvents
+
+/**
+ * Requests a token from the API and
+ * NOTE: Make sure that CLIENT_ID and CLIENT_SECRET are set as environment variables.
+ * @function
+ * @return {Promise<string> | Promise<null>}
+ */
+function requestToken() {
+  if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
+    const client = createClient()
+    const setAsync = promisify(client.set).bind(client)
+
+    return request.post({
+      url: AUTH_ENDPOINT,
+      json: {
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        audience: 'api.eventzimmer.de',
+        grant_type: 'client_credentials'
+      }
+    }).then((body) => {
+      const token = body.access_token
+      return setAsync('access_token', token, 'EX', 35000)
+    }).then((status) => {
+      client.quit()
+      return Promise.resolve(status)
+    }).catch((err) => {
+      client.quit()
+      return Promise.reject(err)
+    })
+  } else {
+    return Promise.reject('CLIENT_ID or CLIENT_SECRET not specified!')
+  }
+}
+
+exports.requestToken = requestToken
