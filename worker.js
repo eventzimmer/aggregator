@@ -118,7 +118,9 @@ sourcesQueue.process(async (job) => {
       return Promise.all([
         Promise.resolve(source),
         iCal.loadFromSource(source[1])
-          .then((archive) => iCal.transFormToEventList(archive))
+          .then((archive) => {
+            return iCal.transFormToEventList(archive)
+          })
           .then((components) => Promise.all(components.map((component) => iCal.transFormToEvent(component))))
       ])
     } else {

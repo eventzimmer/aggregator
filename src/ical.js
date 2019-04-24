@@ -8,14 +8,7 @@ const { parse, Component, Event } = require('ical.js')
  * @return {Promise<String>}
  */
 function loadFromSource (url) {
-  return new Promise((resolve, reject) => {
-    request.get(url, function (err, responseText) {
-      if (err) {
-        reject(err)
-      }
-      resolve(responseText)
-    })
-  })
+  return request(url)
 }
 
 exports.loadFromSource = loadFromSource
@@ -58,7 +51,7 @@ function transFormToEvent (source) {
       starts_at: event.startDate.toJSDate(),
       location: (event.location !== null) ? event.location : parentOrganizer,
       url: event.component.getFirstPropertyValue('url'),
-      images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : ''
+      images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : []
     })
   })
 }
