@@ -1,7 +1,8 @@
 const Queue = require('bull');
 const bunyan = require('bunyan')
 
-const { requestToken } = require('./src/endpoint')
+const { createClient } = require('./src/utils')
+const { requestToken, createEvents } = require('./src/endpoint')
 const { currentSource } = require('./src/sources')
 const facebook = require('./src/facebook')
 const iCal = require('./src/ical')
@@ -28,9 +29,37 @@ tokenQueue.process(async (job) => {
 logger.info(`Initializing event queue`)
 const eventQueue = new Queue('events', REDIS_URL)
 
-eventQueue.process(async(job, done) => {
-  console.log(job.data)
-  done()
+eventQueue.process(async(job) => {
+  const client = createClient()
+  const sismemberAsync = promisify(client.sismember).bind(client)
+  const saddAsync = promisify(client.sadd).bind(client)
+  let event = job.data
+
+  return Promise.all([
+    loadTSVFromUrl(SOURCES_URL), // Verify that event source is in sources
+    loadTSVFromUrl(LOCATIONS_URL), // Verify that event location is in locations
+    sismemberAsync('processed_events', event.url) // Verify has not been processed before
+  ]).then((checks) => { // Check event
+    if (checks[0].find((s) => s[1] === event.source) === undefined) {
+      return Promise.reject(`Cannot find source ${event.source} in list of sources.`)
+    } else if (checks[1].find((l) => l[0]) === undefined) {
+      return Promise.reject(`Cannot find location ${event.location} in list of locations.`)
+    } else if (checks[2]) {
+      return Promise.reject(`Event with url ${event.url} has been processed before.`)
+    } else {
+      return Promise.resolve(event)
+    }
+  }).then((event) => { // If Facebook => get more event details
+
+  }).then((event) => { // Add event
+    return Promise.all([
+        createEvents([event]),
+        saddAsync('processed_events', event.url)
+    ])
+  }).catch((err) => {
+    client.quit()
+    return Promise.reject(err)
+  })
 })
 
 
@@ -59,4 +88,4 @@ sourcesQueue.process(async (job) => {
 })
 
 tokenQueue.add({}, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-sourcesQueue.add({}, { repeat: { cron: '0 9-21 * * *' }}) // During 9am and 9pm every day
+sourcesQueue.add({}, { repeat: { cron: '0 9-21 * * *' }}) // Hourly during 9am and 9pm every day
