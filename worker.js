@@ -3,7 +3,7 @@ const { promisify } = require('util')
 const Queue = require('bull')
 const bunyan = require('bunyan')
 
-const { createClient } = require('./src/utils')
+const { createClient, loadTSVFromUrl, LOCATIONS_URL } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
 const { currentSource } = require('./src/sources')
 const facebook = require('./src/facebook')
@@ -28,19 +28,48 @@ tokenQueue.process(async (job) => {
   return requestToken()
 })
 
-logger.info(`Initializing event queue`)
+logger.info(`Initializing events queue`)
 const eventQueue = new Queue('events', REDIS_URL)
+eventQueue.on('error', (err) => logger.error(err))
 
+/**
+ * Adding a new event is done in 4 stages
+ * - 1) check if event URL has previously been processed
+ * - 2) (check if location is valid)
+ * - 3) if aggregated via Facebook => retrieve details
+ * - 4) post to endpoint
+ * - 4) add to list of processed events
+ */
 eventQueue.process(1,async(job) => {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
   const saddAsync = promisify(client.sadd).bind(client)
   let event = job.data
-  console.log(event)
-  logger.debug(`Received event with url ${event.url}`)
+  logger.debug(event)
+  logger.info(`Received event with url ${event.url}`)
 
-  /*sismemberAsync('processed_events', event.url).then(() => { // Check if it has been processed before
-    if (event.id !== undefined) {
+  sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
+    if (count) {
+      logger.debug(count)
+      return Promise.reject(`A event with url ${event.url} exists already.`)
+    } else {
+      return loadTSVFromUrl(LOCATIONS_URL).then((locations) => {
+        let location = locations.find((l) => l[0] === event.location)
+        if (location !== undefined) {
+          event.location = {
+            name: location[0],
+            latitude: parseFloat(location[1]),
+            longitude: parseFloat(location[2])
+          }
+          return Promise.resolve(event)
+        } else {
+          return Promise.reject(`Can't find a matching location with name ${event.location} for event ${event.url}`)
+        }
+      })
+    }
+  }).then((event) => {
+    if (event.city !== undefined) { // NOTE: DO NOT REMOVE FACEBOOK'S CITY ATTRIBUTE UNLESS YOU PLAN TO ADD SOMETHING ELSE TO DIFFERENTIATE BETWEEN OTHER AGGREGATOR'S
+      logger.debug(`Fetching event details for facebook event ${event.url}`)
       return facebook.loadFromSource(event.url)
           .then((archive) => facebook.transFormToEventDetails(archive))
           .then((details) => Promise.resolve({
@@ -51,23 +80,29 @@ eventQueue.process(1,async(job) => {
       return Promise.resolve(event)
     }
   }).then((event) => { // Add event to endpoint and processed events
-    console.log(event)
-    return Promise.all([
-        createEvents([event]),
-        saddAsync('processed_events', event.url)
-    ])
+    return createEvents([event])
+      .then(saddAsync('processed_events', event.url))
+      .then((count) => {
+        client.quit()
+        return Promise.resolve(count)
+      })
   }).catch((err) => {
-    console.log("HEY4?")
     client.quit()
     logger.error(err)
     return Promise.reject(err)
-  })*/
+  })
 })
-
 
 logger.info(`Initializing sources queue.`)
 const sourcesQueue = new Queue('sources', REDIS_URL)
+sourcesQueue.on('error', (err) => logger.error(err))
 
+/**
+ * Fetching a source is done in 3 stages
+ * 1) Fetching current source from sources key
+ * 2) Use the current source and fetch info from iCal or Facebook
+ * 3) Populate events with source info and add them (with increasing delay) to the events queue
+ */
 sourcesQueue.process(async (job) => {
   return currentSource().then((source) => {
     source = JSON.parse(source)
@@ -90,14 +125,13 @@ sourcesQueue.process(async (job) => {
       return Promise.reject(`Source of type ${source[0]} is currently not supported.`)
     }
   }).then((results) => {
-    console.log(results)
     let source = { aggregator: results[0][0], url: results[0][1] }
     let events = results[1].map((e) => {
       e.source = source
       return e
     })
     logger.debug(`Fetched ${events.length} events and added them to the queue.`)
-    return Promise.resolve(events.map((e) => eventQueue.add(e)))
+    return Promise.resolve(events.map((e, index) => eventQueue.add(e, { delay: index * 10000 })))
   }).catch((err) => {
     logger.error(err)
     return Promise.reject(new Error(err))
