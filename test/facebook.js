@@ -87,7 +87,7 @@ describe('facebook', function () {
       facebook.transFormToEvent(fixture).then((event) => {
         expect(event.name).to.equal('Headbanger`s Metal Party - Bang your Head!!! Warm-up Party')
         expect(event.url).to.be.a('string')
-        expect(event.date).to.be.a('date')
+        expect(event.starts_at).to.be.a('date')
         expect(event.location).to.be.a('string')
         done()
       }).catch((err) => {

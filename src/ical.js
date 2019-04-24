@@ -55,7 +55,7 @@ function transFormToEvent (source) {
     resolve({
       name: event.summary,
       description: event.description,
-      date: event.startDate.toJSDate(),
+      starts_at: event.startDate.toJSDate(),
       location: (event.location !== null) ? event.location : parentOrganizer,
       url: event.component.getFirstPropertyValue('url'),
       images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : ''

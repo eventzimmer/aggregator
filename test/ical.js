@@ -40,7 +40,7 @@ describe('iCal', function () {
             expect(event.name).to.be.a('string')
             expect(event.description).to.be.a('string')
             expect(event.url).to.be.a('string')
-            expect(event.date).to.be.a('date')
+            expect(event.starts_at).to.be.a('date')
             expect(event.location).to.be.a('string')
             // expect(event.images).to.be.a('string')
             done()

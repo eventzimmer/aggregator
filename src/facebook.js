@@ -97,7 +97,7 @@ function transFormToEvent (data) {
   return new Promise((resolve) => {
     resolve({
       name: data.name,
-      date: new Date(data.time_range.start),
+      starts_at: new Date(data.time_range.start),
       url: `${EVENT_URL}${data.id}`,
       location: data.event_place.name,
       city: data.event_place.city.contextual_name
