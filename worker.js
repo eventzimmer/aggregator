@@ -40,7 +40,7 @@ eventQueue.on('error', (err) => logger.error(err))
  * - 4) post to endpoint
  * - 4) add to list of processed events
  */
-eventQueue.process(1,async(job) => {
+eventQueue.process(1, async (job) => {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
   const saddAsync = promisify(client.sadd).bind(client)
@@ -51,7 +51,7 @@ eventQueue.process(1,async(job) => {
   sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
     if (count) {
       logger.debug(count)
-      return Promise.reject(`A event with url ${event.url} exists already.`)
+      return Promise.reject(new Error(`A event with url ${event.url} exists already.`))
     } else {
       return loadTSVFromUrl(LOCATIONS_URL).then((locations) => {
         let location = locations.find((l) => l[0] === event.location)
@@ -63,7 +63,7 @@ eventQueue.process(1,async(job) => {
           }
           return Promise.resolve(event)
         } else {
-          return Promise.reject(`Can't find a matching location with name ${event.location} for event ${event.url}`)
+          return Promise.reject(new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
         }
       })
     }
@@ -71,11 +71,11 @@ eventQueue.process(1,async(job) => {
     if (event.city !== undefined) { // NOTE: DO NOT REMOVE FACEBOOK'S CITY ATTRIBUTE UNLESS YOU PLAN TO ADD SOMETHING ELSE TO DIFFERENTIATE BETWEEN OTHER AGGREGATOR'S
       logger.debug(`Fetching event details for facebook event ${event.url}`)
       return facebook.loadFromSource(event.url)
-          .then((archive) => facebook.transFormToEventDetails(archive))
-          .then((details) => Promise.resolve({
-            ...event,
-            ...details
-          }))
+        .then((archive) => facebook.transFormToEventDetails(archive))
+        .then((details) => Promise.resolve({
+          ...event,
+          ...details
+        }))
     } else {
       return Promise.resolve(event)
     }
@@ -122,7 +122,7 @@ sourcesQueue.process(async (job) => {
           .then((components) => Promise.all(components.map((component) => iCal.transFormToEvent(component))))
       ])
     } else {
-      return Promise.reject(`Source of type ${source[0]} is currently not supported.`)
+      return Promise.reject(new Error(`Source of type ${source[0]} is currently not supported.`))
     }
   }).then((results) => {
     let source = { aggregator: results[0][0], url: results[0][1] }
@@ -139,5 +139,5 @@ sourcesQueue.process(async (job) => {
 })
 
 tokenQueue.add({}, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-//sourcesQueue.add({}, { repeat: { cron: '0 9-21 * * *' }}) // Hourly during 9am and 9pm every day
+// sourcesQueue.add({}, { repeat: { cron: '0 9-21 * * *' }}) // Hourly during 9am and 9pm every day
 sourcesQueue.add({})

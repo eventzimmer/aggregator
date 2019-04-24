@@ -50,7 +50,7 @@ exports.createEvents = createEvents
  * @function
  * @return {Promise<string> | Promise<null>}
  */
-function requestToken() {
+function requestToken () {
   if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
     const client = createClient()
     const setAsync = promisify(client.set).bind(client)
@@ -74,7 +74,7 @@ function requestToken() {
       return Promise.reject(err)
     })
   } else {
-    return Promise.reject('CLIENT_ID or CLIENT_SECRET not specified!')
+    return Promise.reject(new Error('CLIENT_ID or CLIENT_SECRET not specified!'))
   }
 }
 
