@@ -16,7 +16,9 @@ function currentSource () {
 
     llenAsync('sources').then((response) => {
       if (response === 0) {
-        return loadTSVFromUrl(SOURCES_URL).then((sources) => lpushAsync('sources', ...sources.map((s) => JSON.stringify(s))))
+        return loadTSVFromUrl(SOURCES_URL)
+          .then((sources) => Promise.resolve(sources.filter((s) => s.length === 2)))
+          .then((sources) => lpushAsync('sources', ...sources.map((s) => JSON.stringify(s))))
       } else {
         return Promise.resolve()
       }

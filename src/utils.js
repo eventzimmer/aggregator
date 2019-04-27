@@ -64,10 +64,10 @@ exports.loadTSVFromUrl = loadTSVFromUrl
  * Where to find the locations JSON
  * @type {string}
  */
-exports.LOCATIONS_URL = 'https://raw.githubusercontent.com/eventzimmer/schema/master/eventzimmer_locations.tsv'
+exports.LOCATIONS_URL = 'https://docs.google.com/spreadsheets/d/17Ov96OKzf3IpUlfQ5DUizx2ahsWNX3XCf8xkkkqaYuM/export?format=tsv'
 
 /**
  * Where to find the sources JSON
  * @type {string}
  */
-exports.SOURCES_URL = 'https://raw.githubusercontent.com/eventzimmer/schema/master/eventzimmer_sources.tsv'
+exports.SOURCES_URL = 'https://docs.google.com/spreadsheets/d/1Cmkw93CK3jUcxiErRZ050qft2hALq9yV4K-kwoHQWC8/export?format=tsv'
