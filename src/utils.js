@@ -70,4 +70,4 @@ exports.LOCATIONS_URL = 'https://docs.google.com/spreadsheets/d/17Ov96OKzf3IpUlf
  * Where to find the sources JSON
  * @type {string}
  */
-exports.SOURCES_URL = 'https://docs.google.com/spreadsheets/d/1Cmkw93CK3jUcxiErRZ050qft2hALq9yV4K-kwoHQWC8/export?format=tsv'
+exports.SOURCES_URL = 'https://docs.google.com/spreadsheets/d/14oeNUZ_nCOBp-Msoe_fgK5VtIe_h2cYafCj7u67dkIs/export?format=tsv'
