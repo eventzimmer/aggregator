@@ -68,10 +68,10 @@ function requestToken () {
       return setAsync('access_token', token, 'EX', 35000)
     }).then((status) => {
       client.quit()
-      return Promise.resolve(status)
+      throw (new Error(status))
     }).catch((err) => {
       client.quit()
-      return Promise.reject(err)
+      console.error(err)
     })
   } else {
     return Promise.reject(new Error('CLIENT_ID or CLIENT_SECRET not specified!'))

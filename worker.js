@@ -57,7 +57,7 @@ eventQueue.process(1, async (job) => {
 
   sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
     if (count) {
-      return Promise.reject(new Error(`A event with url ${event.url} and name ${event.name} exists already.`))
+      throw (new Error(`A event with url ${event.url} and name ${event.name} exists already.`))
     } else {
       return loadTSVFromUrl(LOCATIONS_URL).then((locations) => {
         locations = locations
@@ -73,7 +73,7 @@ eventQueue.process(1, async (job) => {
           }
           return Promise.resolve(event)
         } else {
-          return Promise.reject(new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
+          throw (new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
         }
       })
     }
@@ -99,7 +99,6 @@ eventQueue.process(1, async (job) => {
   }).catch((err) => {
     client.quit()
     logger.error(err)
-    return Promise.reject(err)
   })
 })
 
@@ -134,7 +133,7 @@ sourcesQueue.process(async (job) => {
           .then((components) => Promise.all(components.map((component) => iCal.transFormToEvent(component))))
       ])
     } else {
-      return Promise.reject(new Error(`Source of type ${source[0]} is currently not supported.`))
+      throw (new Error(`Source of type ${source[0]} is currently not supported.`))
     }
   }).then((results) => {
     let source = { aggregator: results[0][0], url: results[0][1] }
@@ -146,7 +145,6 @@ sourcesQueue.process(async (job) => {
     return Promise.resolve(events.map((e, index) => eventQueue.add(e, { delay: index * 10000 })))
   }).catch((err) => {
     logger.error(err)
-    return Promise.reject(new Error(err))
   })
 })
 
