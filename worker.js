@@ -1,6 +1,7 @@
 const { promisify } = require('util')
 
 const Queue = require('bull')
+const Sentry = require('@sentry/node')
 const bunyan = require('bunyan')
 
 const { createClient, loadTSVFromUrl, LOCATIONS_URL } = require('./src/utils')
@@ -10,12 +11,18 @@ const facebook = require('./src/facebook')
 const iCal = require('./src/ical')
 
 const REDIS_URL = (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL : 'redis://localhost:6379/1'
+const SENTRY_DSN = (process.env.SENTRY_DSN !== undefined) ? process.env.SENTRY_DSN : ''
 
 // Initialize logging
 let logger = bunyan.createLogger({
   name: '@eventzimmer/aggregator',
   level: (process.env.LOG_LEVEL !== undefined) ? process.env.LOG_LEVEL : 'debug'
 })
+
+// Initialize sentry
+if (SENTRY_DSN.length) {
+  Sentry.init({ dsn: SENTRY_DSN })
+}
 
 // Initialize access token queue
 logger.info(`Initializing access token queue.`)
