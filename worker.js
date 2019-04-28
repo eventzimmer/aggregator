@@ -54,6 +54,10 @@ eventQueue.process(1, async (job) => {
       return Promise.reject(new Error(`A event with url ${event.url} exists already.`))
     } else {
       return loadTSVFromUrl(LOCATIONS_URL).then((locations) => {
+        locations = locations
+          .filter((l) => l.length === 3)
+          .filter((l) => !isNaN(l[1]) && !isNaN(l[2]))
+
         let location = locations.find((l) => l[0] === event.location)
         if (location !== undefined) {
           event.location = {
