@@ -18,6 +18,7 @@ function currentSource () {
       if (response === 0) {
         return loadTSVFromUrl(SOURCES_URL)
           .then((sources) => Promise.resolve(sources.filter((s) => s.length === 2)))
+          .then((sources) => Promise.resolve(sources.map((s) => s.map((i) => i.trim()))))
           .then((sources) => lpushAsync('sources', ...sources.map((s) => JSON.stringify(s))))
       } else {
         return Promise.resolve()

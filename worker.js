@@ -63,6 +63,7 @@ eventQueue.process(1, async (job) => {
         locations = locations
           .filter((l) => l.length === 3)
           .filter((l) => !isNaN(l[1]) && !isNaN(l[2]))
+          .map((l) => l.map((i) => i.trim()))
 
         let location = locations.find((l) => l[0] === event.location)
         if (location !== undefined) {
