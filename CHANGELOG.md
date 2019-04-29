@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use Google drive for locations and sources
 - Use sentry.io error reporting
 
-### Fixed
+### Changed
 - Use trimmed sources and locations
+- Properly handle duplicate events
 
 ## [0.0.1] - 2019-04-27
 ### Added
