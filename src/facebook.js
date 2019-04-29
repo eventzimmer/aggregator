@@ -94,14 +94,13 @@ exports.transFormToEventDetails = transFormToEventDetails
  * @return {Promise<EventType>}
  */
 function transFormToEvent (data) {
-  return new Promise((resolve) => {
-    resolve({
-      name: data.name,
-      starts_at: new Date(data.time_range.start),
-      url: `${EVENT_URL}${data.id}`,
-      location: data.event_place.name,
-      city: data.event_place.city.contextual_name
-    })
+  console.debug(data)
+  return Promise.resolve({
+    name: data.name,
+    starts_at: new Date(data.time_range.start),
+    url: `${EVENT_URL}${data.id}`,
+    location: data.event_place.name,
+    city: data.event_place.city.contextual_name
   })
 }
 
