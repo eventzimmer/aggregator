@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Use Google drive for locations and sources
 - Use sentry.io error reporting
+- Added Google calendar processing
 
 ### Changed
 - Use trimmed sources and locations
