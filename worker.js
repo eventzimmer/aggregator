@@ -58,7 +58,7 @@ eventQueue.process(1, async (job) => {
   sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
     if (count) {
       let error = new Error(`A event with url ${event.url} and name ${event.name} exists already.`)
-      error.code = "ERR_DUPLICATE"
+      error.code = 'ERR_DUPLICATE'
       throw error
     } else {
       return loadTSVFromUrl(LOCATIONS_URL).then((locations) => {
