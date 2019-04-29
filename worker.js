@@ -31,7 +31,10 @@ const tokenQueue = new Queue('access_tokens', REDIS_URL)
 tokenQueue.on('error', (err) => logger.error(err))
 
 tokenQueue.process(async (job) => {
-  return requestToken().then(() => logger.info(`Successfully updated access token`))
+  return requestToken().then(() => {
+    logger.info(`Successfully updated access token`)
+    return Promise.resolve(job)
+  })
 })
 
 logger.info(`Initializing events queue`)
@@ -110,6 +113,7 @@ eventQueue.process(1, async (job) => {
   }).then((event) => {
     client.quit()
     logger.info(`Successfully processed event with url ${event.url} and name ${event.url}`)
+    return Promise.resolve(job)
   })
     .catch((err) => {
       client.quit()
