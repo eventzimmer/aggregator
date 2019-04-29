@@ -71,7 +71,7 @@ function requestToken () {
       throw (new Error(status))
     }).catch((err) => {
       client.quit()
-      console.error(err)
+      return Promise.reject(err)
     })
   } else {
     return Promise.reject(new Error('CLIENT_ID or CLIENT_SECRET not specified!'))

@@ -3,7 +3,7 @@ const { promisify } = require('util')
 const Queue = require('bull')
 const Sentry = require('@sentry/node')
 const bunyan = require('bunyan')
-const { StatusCodeError } = require('request-promise/errors')
+const { StatusCodeError } = require('request-promise-native/errors')
 
 const { createClient, loadTSVFromUrl, LOCATIONS_URL } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
@@ -28,12 +28,10 @@ if (SENTRY_DSN.length) {
 // Initialize access token queue
 logger.info(`Initializing access token queue.`)
 const tokenQueue = new Queue('access_tokens', REDIS_URL)
-
-tokenQueue.on('completed', (job, result) => logger.info(`Successfully updated access token`))
 tokenQueue.on('error', (err) => logger.error(err))
 
 tokenQueue.process(async (job) => {
-  return requestToken()
+  return requestToken().then(() => logger.info(`Successfully updated access token`))
 })
 
 logger.info(`Initializing events queue`)
@@ -56,7 +54,7 @@ eventQueue.process(1, async (job) => {
   logger.debug(event)
   logger.info(`Received event with url ${event.url}`)
 
-  sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
+  return sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
     if (count) {
       let error = new Error(`A event with url ${event.url} and name ${event.name} exists already.`)
       error.code = 'ERR_DUPLICATE'
@@ -118,7 +116,7 @@ eventQueue.process(1, async (job) => {
       if (err.code === 'ERR_DUPLICATE') {
         logger.info(err.message)
       } else {
-        logger.error(err) // Generic issue
+        return Promise.reject(err) // Generic issue
       }
     })
 })
@@ -164,8 +162,6 @@ sourcesQueue.process(async (job) => {
     })
     logger.debug(`Fetched ${events.length} events and added them to the queue.`)
     return Promise.resolve(events.map((e, index) => eventQueue.add(e, { delay: index * 10000 })))
-  }).catch((err) => {
-    logger.error(err)
   })
 })
 

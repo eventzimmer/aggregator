@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use trimmed sources and locations
 - Properly handle duplicate events
+- Properly handle 400 status from API
+- Remove obsolete console statements
 
 ## [0.0.1] - 2019-04-27
 ### Added

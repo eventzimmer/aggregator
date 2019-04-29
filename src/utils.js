@@ -37,8 +37,8 @@ function createClient () {
   let client = redis.createClient({
     url: (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL : 'redis://localhost:6379/1'
   })
-  client.on('error', (err) => {
-    console.error(err)
+  client.on('error', function () {
+    process.exit(1)
   })
   return client
 }
