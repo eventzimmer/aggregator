@@ -3,6 +3,7 @@ const { promisify } = require('util')
 const Queue = require('bull')
 const Sentry = require('@sentry/node')
 const bunyan = require('bunyan')
+const { StatusCodeError } = require('request-promise/errors')
 
 const { createClient, loadTSVFromUrl, LOCATIONS_URL } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
@@ -93,20 +94,33 @@ eventQueue.process(1, async (job) => {
       return Promise.resolve(event)
     }
   }).then((event) => { // Add event to endpoint and processed events
-    return createEvents([event])
-      .then(saddAsync('processed_events', event.url))
-      .then((count) => {
-        client.quit()
-        return Promise.resolve(count)
-      })
-  }).catch((err) => {
+    return Promise.all([
+      createEvents([event]),
+      saddAsync('processed_events', event.url)
+    ]).catch((err) => {
+      if (err instanceof StatusCodeError) {
+        if (err.statusCode === 400) {
+          logger.info(`Event with url ${event.url} has previously been added to the API.`)
+          return Promise.resolve(event)
+        } else {
+          throw err
+        }
+      } else {
+        throw err
+      }
+    })
+  }).then((event) => {
     client.quit()
-    if (err.code === 'ERR_DUPLICATE') {
-      logger.info(err.message)
-    } else {
-      logger.error(err) // Generic issue
-    }
+    logger.info(`Successfully processed event with url ${event.url} and name ${event.url}`)
   })
+    .catch((err) => {
+      client.quit()
+      if (err.code === 'ERR_DUPLICATE') {
+        logger.info(err.message)
+      } else {
+        logger.error(err) // Generic issue
+      }
+    })
 })
 
 logger.info(`Initializing sources queue.`)
