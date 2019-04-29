@@ -4,33 +4,47 @@ const path = require('path')
 const expect = require('chai').expect
 const iCal = require('../src/ical')
 
-const FIXTURE_PATH = path.join(process.cwd(), 'fixtures/epplehaus-a6700e35263.ics')
+const EPPLEHAUS_PATH = path.join(process.cwd(), 'fixtures/epplehaus-a6700e35263.ics')
+const GOOGLE_PATH = path.join(process.cwd(), 'fixtures/google.ics')
 
 describe('iCal', function () {
-  describe('loadFromSource', function () {
-    // Since this is basically testing core requests functionality it's quite stupid
-  })
-
   describe('transformToEventList', function () {
     it('Should read an iCal and build a list of events from it', function (done) {
-      fs.readFile(FIXTURE_PATH, function (err, data) {
+      fs.readFile(EPPLEHAUS_PATH, function (err, data) {
         if (err) {
           done(err)
+        } else {
+          iCal.transFormToEventList(data.toString()).then((events) => {
+            expect(events).to.have.length(10)
+            done()
+          }).catch((err) => {
+            done(err)
+          })
         }
+      })
+    })
 
-        iCal.transFormToEventList(data.toString()).then((events) => {
-          expect(events).to.have.length(10)
-          done()
-        }).catch((err) => {
+    it('Should read from a Google iCal and build a list of events from it', function (done) {
+      fs.readFile(GOOGLE_PATH, function (err, data) {
+        if (err) {
           done(err)
-        })
+        } else {
+          iCal.transFormToEventList(data.toString()).then((events) => {
+            events.forEach((event) => {
+              expect(event.getFirstPropertyValue('url')).to.include('https://www.google.com/')
+            })
+            done()
+          }).catch((err) => {
+            done(err)
+          })
+        }
       })
     })
   })
 
   describe('transformToEvent', function () {
     it('Should transfer a single vevent to a valid event object', function (done) {
-      fs.readFile(FIXTURE_PATH, (err, data) => {
+      fs.readFile(EPPLEHAUS_PATH, (err, data) => {
         if (err) {
           done(err)
         }

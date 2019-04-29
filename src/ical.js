@@ -25,7 +25,17 @@ function transFormToEventList (source) {
     try {
       let vData = parse(source)
       let calendar = new Component(vData)
-      resolve(calendar.getAllSubcomponents())
+      let prodid = calendar.getFirstPropertyValue('prodid')
+      if (prodid.includes('Google Inc') && prodid.includes('Google Calendar')) { // Add missing event URL's to Google calendar
+        let timezone = calendar.getFirstPropertyValue('x-wr-timezone')
+        resolve(calendar.getAllSubcomponents().map((component) => {
+          let uid = component.getFirstPropertyValue('uid')
+          component.addPropertyWithValue('url', `https://www.google.com/calendar/event?eid=${uid}&ctz=${timezone}`)
+          return component
+        }))
+      } else {
+        resolve(calendar.getAllSubcomponents())
+      }
     } catch (err) {
       reject(err)
     }
@@ -41,18 +51,15 @@ exports.transFormToEventList = transFormToEventList
  * @return {Promise<Object>}
  */
 function transFormToEvent (source) {
-  return new Promise((resolve, reject) => {
-    let event = new Event(source)
-    let parentOrganizer = event.component.parent.getFirstPropertyValue('x-wr-calname')
-
-    resolve({
-      name: event.summary,
-      description: event.description,
-      starts_at: event.startDate.toJSDate(),
-      location: (event.location !== null) ? event.location : parentOrganizer,
-      url: event.component.getFirstPropertyValue('url'),
-      images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : []
-    })
+  let event = new Event(source)
+  let parentOrganizer = event.component.parent.getFirstPropertyValue('x-wr-calname')
+  return Promise.resolve({
+    name: event.summary,
+    description: event.description,
+    starts_at: event.startDate.toJSDate(),
+    location: (event.location !== null) ? event.location : parentOrganizer,
+    url: event.component.getFirstPropertyValue('url'),
+    images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : []
   })
 }
 
