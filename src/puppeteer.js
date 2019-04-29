@@ -43,7 +43,6 @@ function recordResponses (url) {
         page.goto(url).then(() => {
           page.waitFor(5000).then(() => {
             browser.close().then(() => {
-              console.debug(`Closed browser`)
               resolve(responses)
             }).catch((err) => {
               reject(err)

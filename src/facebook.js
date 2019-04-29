@@ -94,7 +94,6 @@ exports.transFormToEventDetails = transFormToEventDetails
  * @return {Promise<EventType>}
  */
 function transFormToEvent (data) {
-  console.debug(data)
   return Promise.resolve({
     name: data.name,
     starts_at: new Date(data.time_range.start),
