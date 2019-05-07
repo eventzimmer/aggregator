@@ -24,6 +24,8 @@ function transFormToEventList (source) {
     let edges = source.filter((s) => {
       return (s.url === GRAPHQL_URL)
     }).filter((s) => {
+      return (s.data.data.page !== undefined)
+    }).filter((s) => {
       return (s.data.data.page.upcoming_events || s.data.data.page.upcomingRecurringEvents)
     }).map((s) => {
       return (s.data.data.page.upcoming_events) ? s.data.data.page.upcoming_events.edges : s.data.data.page.upcomingRecurringEvents.edges

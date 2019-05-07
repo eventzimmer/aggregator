@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Change schedule -2h to fit Ireland location
+- Make facebook transform more robust
 
 ## [0.0.2] - 2019-04-29
 ### Added
