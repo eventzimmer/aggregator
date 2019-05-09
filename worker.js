@@ -101,6 +101,7 @@ eventQueue.process(1, async (job) => {
     ]).catch((err) => {
       if (err instanceof StatusCodeError) {
         if (err.statusCode === 400) {
+          logger.debug(err.response)
           logger.info(`Event with url ${event.url} has previously been added to the API.`)
           return Promise.resolve(event)
         } else {
@@ -170,4 +171,4 @@ sourcesQueue.process(async (job) => {
 })
 
 tokenQueue.add({}, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-sourcesQueue.add({}, { repeat: { cron: '*/15 0,7-21 * * *' } }) // Every 15 minutes. Scheduled for debugging.
+sourcesQueue.add({}, { repeat: { cron: '* 0,7-21 * * *' } }) // Every 15 minutes. Scheduled for debugging.
