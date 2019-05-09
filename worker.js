@@ -171,4 +171,4 @@ sourcesQueue.process(async (job) => {
 })
 
 tokenQueue.add({}, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-sourcesQueue.add({}, { repeat: { cron: '* 0,7-21 * * *' } }) // Every 15 minutes. Scheduled for debugging.
+sourcesQueue.add({}, { repeat: { cron: '*/10 0,7-21 * * *' } }) // Every 15 minutes. Scheduled for debugging.
