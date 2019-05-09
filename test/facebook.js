@@ -46,6 +46,26 @@ describe('facebook', function () {
       })
     })
 
+    it('Should transform the Cafe Haag object to a list of edges', function (done) {
+      fs.readFile(path.join(process.cwd(), 'fixtures/cafe_haag_responses.json'), (err, data) => {
+        if (err) {
+          done(err)
+        }
+        let fixtures = JSON.parse(data.toString())
+        facebook.transFormToEventList(fixtures).then((events) => {
+          expect(events).to.have.length(8)
+          events.forEach((e) => {
+            expect(e.id).to.be.a('string')
+            expect(e.name).to.be.a('string')
+            expect(e.url).to.be.a('string')
+          })
+          done()
+        }).catch((err) => {
+          done(err)
+        })
+      })
+    })
+
     it('Should transform an API object to a list of edges', function (done) {
       fs.readFile(path.join(process.cwd(), 'fixtures/records.json'), (err, data) => {
         if (err) {

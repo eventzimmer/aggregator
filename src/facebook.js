@@ -31,7 +31,7 @@ function transFormToEventList (source) {
       return (s.data.data.page.upcoming_events) ? s.data.data.page.upcoming_events.edges : s.data.data.page.upcomingRecurringEvents.edges
     }).reduce(function (a, b) {
       return a.concat(b)
-    }, [])
+    }, []).filter((e) => (typeof(e) !== 'undefined'))
 
     resolve(edges.map((edge) => {
       return {

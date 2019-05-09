@@ -1,0 +1,797 @@
+[{
+	"url": "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-1/c27.0.720.720a/p720x720/13315594_1164622946902062_2105675128015001974_n.jpg?_nc_cat=100&_nc_ht=scontent-frt3-1.xx&oh=14668b3b4e11dce6226fb3ca85dc88d9&oe=5D75D8DE"
+}, {
+	"url": "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-1/c7.0.200.200a/p200x200/13315594_1164622946902062_2105675128015001974_n.jpg?_nc_cat=100&_nc_ht=scontent-frt3-1.xx&oh=6c1262a2cf9772cbee6b0380f2c849ff&oe=5D717687"
+}, {
+	"url": "https://scontent-frt3-1.xx.fbcdn.net/v/t31.0-8/24210410_1713039045393780_6419314327266545889_o.jpg?_nc_cat=102&_nc_ht=scontent-frt3-1.xx&oh=a7de93ba2c4bad8dd596eb624cdd4533&oe=5D5EDBB6"
+}, {
+	"url": "https://www.facebook.com/api/graphql/",
+	"data": {
+		"data": {
+			"page": {
+				"id": "166834246680942",
+				"upcomingRecurringEvents": {
+					"edges": [{
+						"node": {
+							"id": "336233213746848",
+							"__typename": "Event",
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"contextual_name": "Tübingen",
+									"id": "110776595613900"
+								},
+								"id": "166834246680942"
+							},
+							"name": "Mathias Möschle - Sammlung- Ausstellungseröffnung",
+							"isDraft": false,
+							"coverPhoto": {
+								"photo": {
+									"image": {
+										"uri": "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/58442184_2409355799095431_2135518564898045952_n.jpg?_nc_cat=100&_nc_ht=scontent-frt3-1.xx&oh=8a6aa37332eb950c7d3f00d4309afbe2&oe=5D56E365"
+									},
+									"id": "2409355785762099"
+								},
+								"focus": {
+									"x": 0.5,
+									"y": 0.50085034013605
+								}
+							},
+							"coverVideo": null,
+							"viewerCapability": {
+								"canEdit": false
+							},
+							"place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"contextual_name": "Tübingen",
+									"id": "110776595613900"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"description": {
+								"text": "EINLADUNG\nMathias Möschle - Sammlung- Ausstellungseröffnung\n\nVom 23. Februar bis 19. Mai 2019 wird im Café Haag die \"SAMMLUNG\" von Mathias Möschle zu sehen.\n\nEine Ansammlung.\nEin Sich-Sammeln.\nIch bin assoziativ und sprunghaft.\nEs gibt keine einfache Logik.\nEs ist befremdent.\nUnd für den ein- oder anderen gehört es \"irgendwie\" oder \"irgendwo\" zusammen.\nDa ist ein Wechselspiel zwischen Formen, Farben, Texten und Material.\nUnd ein Zusammenhang, der für mich schlüsslig ist.\nWo's nicht weitergeht,\nwo der Verstand nicht mehr so recht mitmacht,\nda beginne ich.\nUnd Spaß macht es.\n\n>> Ich sollte Ihnen meine Bilder erklären und wie es dazu kam.\nSchon Beuys musste damals kapitulieren und reagierte mit einem ironischen Titel für eine seiner Aktionen: „Wie man dem toten Hasen die Bilder erklärt.“\nGenügt es Ihnen, dass ich erzähle, wie ich jahrelang an der Schule eine Grundschul-AG leitete, wo man zeichnen, malen, bauen und plastizieren konnte? Ist das schon die ganze Erklärung? Ist das überhaupt eine Erklärung? \nEine Schreib-AG habe ich nicht geleitet. Ich habe auch nicht Bildhauerei studiert und Malerei war nur eine Art Nebenfach. Jahrelang habe ich mich mit Radierung beschäftigt. Ein Zeichner bin ich. Und Zeichnen ist Millimeterarbeit. So habe ich gelernt. Erst, wenn man das begriffen hat, darf man wie wild durcheinander kritzeln. Aber dafür braucht man lange. Oder wie einer meiner Lehrer, Professor Wolfgang Gäfgen, einmal sagte: „Mathias, wissen Sie: Es ist ein weiter Weg!“\nAlso wie kam es zu diesen Bildern? Ich habe kein Konzept, nach dem ich vorgehe (im Unterschied zu Beuys).\nIch sammle, trage zusammen, ich spiele. „Und wie bist du darauf gekommen?“ Würde man vielleicht ein Kind fragen: „So halt“, würde es antworten. <<  Mathias Möschle\n\n\nAlle 2-3 Monate werden wir wechselnden lokalen Künstler*innen eine Ausstellungsmöglichkeit im Café Haag bieten. Neben dem Fördergedanken ist es uns auch wichtig, ein Ambiente zu schaffen, das zu Gesprächen und Diskussionen rund um Kunst, Sinn und Unsinn einlädt. \n\nEröffnung der Ausstellung mit Sektchen am Sa, 23. Februar um 18 Uhr 🍾\n\n\nWir freuen uns auf Euch!\n\n\nAusstellungsdauer \n16.02.19 – 19.05.19 • Mo – So 16 – 00 h •  Café Haag, Am Haagtor 1 Tübingen\n\n • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •\nMathias Möschle\nStationen\n\nGeb. 18.6.1960 in Offenburg / verheiratet, 3 Kinder\n1979-1983 Pädagogische Hochschule Reutlingen, Kunsterziehung\n1987-1992 Akademie der Bildenden Künste Stuttgart\nbei Prof. Peter Grau und Prof. Wolfgang Gäfgen\nArbeit an Grund- und Hauptschulen und in der Erwachsenenbildung\n\nKontakt zum Künstler:\nmathias_moeschle@web.de"
+							},
+							"timeContext": "Bis 20. Mai",
+							"childEvents": {
+								"edges": [{
+									"node": {
+										"id": "336233253746844",
+										"currentStartTimestamp": 1557410400,
+										"shortTimeLabel": "Do. 16:00 UTC+02"
+									}
+								}, {
+									"node": {
+										"id": "336233250413511",
+										"currentStartTimestamp": 1557496800,
+										"shortTimeLabel": "Fr. 16:00 UTC+02"
+									}
+								}],
+								"count": 11
+							},
+							"timezone": "Europe/Berlin",
+							"friends": {
+								"edges": []
+							},
+							"socialContext": {
+								"text": "Kunst"
+							},
+							"has_child_events": true,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"event_viewer_capability": {
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"is_event_draft": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "336233213746848",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false
+						},
+						"is_added_to_profile_calendar": false,
+						"is_hidden_on_profile_calendar": false,
+						"cursor": "AQHRWQtyB9Tt_NXSUNxaxlPfezJucqm5WHMQr56sNjCO36h1nQ-x4ZGjf0pvSAIVlOeJjwJpsxAUuHZAUou-xLFHHw"
+					}, {
+						"node": {
+							"id": "331016654272660",
+							"__typename": "Event",
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"contextual_name": "Tübingen",
+									"id": "110776595613900"
+								},
+								"id": "166834246680942"
+							},
+							"name": "Michael C. Peters - Artbeats - Ausstellungseröffnung",
+							"isDraft": false,
+							"coverPhoto": {
+								"photo": {
+									"image": {
+										"uri": "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/59301561_2414761415221536_5418546550408216576_n.jpg?_nc_cat=108&_nc_ht=scontent-frt3-1.xx&oh=60346c376a75ab418b7af87d60ea72ee&oe=5D762804"
+									},
+									"id": "2414761408554870"
+								},
+								"focus": {
+									"x": 0.52409638554217,
+									"y": 0.5
+								}
+							},
+							"coverVideo": null,
+							"viewerCapability": {
+								"canEdit": false
+							},
+							"place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"contextual_name": "Tübingen",
+									"id": "110776595613900"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"description": {
+								"text": "EINLADUNG\nMichael C. Peters - Artbeats - Ausstellungseröffnung\n\nVom 01. Juni bis 28. Juli 2019 wird im Café Haag die Ausstellung \"ARTBEATS\" von Michael C. Peters zu sehen.\n\n • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •\n\nUnterwegs in Cafés, Festivals, verschiedenen Orten und Städten begleitet mich das Skizzenbuch.\n\nDie feine schwarze Outline auf dem Weiss des Papiers eröffnet das kompositorische Spiel.\n\nIch fühle mich wie ein Seismograph, der durch die Musik in Schwingung gebracht, gleichzeitig hört und den Tuschestift in Bewegung bringt. Improvisation, Klang und Rythmus werden wie im \nRaum auch Teil des Bildes.\n\nOder alleine am Tisch, Meditation in Bewegung. Die Bilder entwickeln sich, ich ahne wohin die Linien wollen und so fügen sich Formen und Elemente zu einer Komposition. Der Bezug zu einem inneren Gefühl kann so zum Vorschein kommen und ich bin selbst überrascht von den z.T. surreal anmutenden Bildwelten, die aus einer ungeahnten und doch bekannten Intuition entstehen. \nDie Ausstellung zeigt eine Auswahl ganz aktueller Linien-Zeichnungen, die unterwegs entstanden sind.\n\n\n • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •\n\nAlle 2-3 Monate werden wir wechselnden lokalen Künstler*innen eine Ausstellungsmöglichkeit im Café Haag bieten. Neben dem Fördergedanken ist es uns auch wichtig, ein Ambiente zu schaffen, das zu Gesprächen und Diskussionen rund um Kunst, Sinn und Unsinn einlädt. \n\nEröffnung der Ausstellung mit Sektchen am Sa, 01. Juni um 18 Uhr✌\n\nWir freuen uns auf Euch!\n\nAusstellungsdauer \n01.06.19 – 28.07.19 • Mo – So 16 – 00 h •  Café Haag, Am Haagtor 1 Tübingen\n\n • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •\nMichael C. Peters\nHomepage: michaelcpeters.com\nFB: Michael Carsten Peters | Michael Carsten Peters / Photography\n\nSince 2001 professional freelance artistic activity in media interplay between abstract drawing and staged photography, conceptual idea, which can include calculated coincidence and compositional visuell thoughts and expressions, which are perceptibly connected with the sound of music, as well as image ideas, which are designed for interaction with people, dancers, actors and myself and the environment. Improvisation and spatial awareness (space-consciousness) are elementary terms for my way of working as an artist.\n\n1985–86 Free School of Art, Stuttgart\n1986–87 Fachabitur Design, Pforzheim\n1987–97 Study of visual communication with a focus on photography, FH für Gestaltung, Bielefeld\n1993–94 Studies abroad in Bournemouth (UK) with BTEC – Continuing Diploma in Media Production\n1997 Degree: Diploma in Art Photography (FH), Bielefeld"
+							},
+							"timeContext": "30 Termine · 1. Juni - 1. Juli",
+							"childEvents": {
+								"edges": [{
+									"node": {
+										"id": "331016667605992",
+										"currentStartTimestamp": 1559397600,
+										"shortTimeLabel": "Sa. 16:00 UTC+02"
+									}
+								}, {
+									"node": {
+										"id": "331016657605993",
+										"currentStartTimestamp": 1559484000,
+										"shortTimeLabel": "So. 16:00 UTC+02"
+									}
+								}],
+								"count": 30
+							},
+							"timezone": "Europe/Berlin",
+							"friends": {
+								"edges": []
+							},
+							"socialContext": {
+								"text": "Kunst"
+							},
+							"has_child_events": true,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"event_viewer_capability": {
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"is_event_draft": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "331016654272660",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false
+						},
+						"is_added_to_profile_calendar": false,
+						"is_hidden_on_profile_calendar": false,
+						"cursor": "AQHRK2KLWZxkVOSLC1Zs5QrWJRS64dcp35Ps31BoHNxUGsM0J9_Iwnwh2wNWTHtHJtWlLZmRZKZAV91kcuasjjYHYw"
+					}],
+					"page_info": {
+						"has_next_page": false,
+						"end_cursor": "AQHR3S3WZzkNg-XkkZdL-yAk08ZDJ81F5gvYNWZNo_P2PAlKEsg4ta-iUnF2ovZ--RtyxiKg0AVJbFHjELcaPx8xyw"
+					}
+				},
+				"viewer_profile_permissions": [],
+				"admin_info": null
+			}
+		},
+		"extensions": {
+			"is_final": true
+		}
+	}
+}, {
+	"url": "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/59301561_2414761415221536_5418546550408216576_n.jpg?_nc_cat=108&_nc_ht=scontent-frt3-1.xx&oh=60346c376a75ab418b7af87d60ea72ee&oe=5D762804"
+}, {
+	"url": "https://www.facebook.com/api/graphql/",
+	"data": {
+		"data": {
+			"page": {
+				"upcoming_events": {
+					"edges": [{
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "2302907376631115",
+							"startTimestampForDisplay": 1557514800,
+							"time_range": {
+								"start": "2019-05-10T21:00:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Fr. 21:00 UTC+02",
+							"shortDateLabel": "Fr., 10. Mai",
+							"suggested_event_context_sentence": {
+								"text": "65 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Karaoke-Night im Café Haag",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "2302907376631115",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHRW8FUzyqrqvVxAanmhKhk7Dc6kFGrsy-ba2qHDT2K4K_nZFEC1kHNy81qBNWTADtEt9-WHvuRyjLg8elRrsuFqw"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "269542807261432",
+							"startTimestampForDisplay": 1557603000,
+							"time_range": {
+								"start": "2019-05-11T21:30:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Sa. 21:30 UTC+02",
+							"shortDateLabel": "Sa., 11. Mai",
+							"suggested_event_context_sentence": {
+								"text": "38 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "La Vida Loca Moving Party im Café HAAG",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "269542807261432",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHRRn9VfhZhwFx5g9K6sr8mXhA9VdJS0XHHJFa5KC22PZyWG5Vj8YsnXxqLL4yu-N7AeuD1YPWznwgd0FhuN5aXGg"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "1575793922551820",
+							"startTimestampForDisplay": 1557858600,
+							"time_range": {
+								"start": "2019-05-14T20:30:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Di. 20:30 UTC+02",
+							"shortDateLabel": "Di., 14. Mai",
+							"suggested_event_context_sentence": {
+								"text": "59 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Kilian Mohns&Micha Kunze - Café Haag, Tübingen",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "1575793922551820",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHR66OMegB8MxNqg-jWpQWUamKZKCPWVRte4ienH-BN_l0NZYNIUZ-6LFMIw-4AqJZ4vpBs6RSUlusybwUSmSpY0Q"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "840530669641887",
+							"startTimestampForDisplay": 1557943200,
+							"time_range": {
+								"start": "2019-05-15T20:00:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Mi. 20:00 UTC+02",
+							"shortDateLabel": "Mi., 15. Mai",
+							"suggested_event_context_sentence": {
+								"text": "92 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Impro im Café",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "840530669641887",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHREjSl6T1IE6ggaoY1tb7ER0wFsN1ilrI-74i3jzFkV3xMZiiutQc3ywxkEqS0iFCSYpDQ3WicNfW4odhQO0_rDA"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "2194889537244229",
+							"startTimestampForDisplay": 1558200600,
+							"time_range": {
+								"start": "2019-05-18T19:30:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Sa. 19:30 UTC+02",
+							"shortDateLabel": "Sa., 18. Mai",
+							"suggested_event_context_sentence": {
+								"text": "28 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Piano-Lounge mit Silian Frische",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "2194889537244229",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHR12MpRuNga77UR3YhKBQFN1uHkDVZPxXlfGQRpSDzwl-SF192gK-k4VpjQaSOZhjxmOipvW4sh5EEXV25xyc_1Q"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "411040176145667",
+							"startTimestampForDisplay": 1558458000,
+							"time_range": {
+								"start": "2019-05-21T19:00:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Di. 19:00 UTC+02",
+							"shortDateLabel": "Di., 21. Mai",
+							"suggested_event_context_sentence": {
+								"text": "94 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Science Pub - Röntgenastronomie und schwarze Löcher",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": false,
+							"connectionStyle": "INTERESTED",
+							"eventID": "411040176145667",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHR-ohHDMUGN1-8aaQpObrGinVssRcHOLRI80nGxR_Okyhd1bAaftErEzGTKgy9p1Z0KwYHBn-fpnFFFAU6NZQ4fg"
+					}],
+					"page_info": {
+						"has_next_page": true,
+						"end_cursor": "AQHRCj68VRrrz-_4cmROuOBWiOwMe8LkuLGQw_vrwXWx9yrl9v-nliDqFpUQZT9mZ6xANF4w0wqQp6iyjbrYez18UA"
+					}
+				},
+				"id": "166834246680942",
+				"viewer_profile_permissions": [],
+				"admin_info": null
+			},
+			"viewer": {
+				"actor": null
+			}
+		},
+		"errors": [{
+			"message": "Errors while executing operation \"PageEventsTabUpcomingEventsCardRendererQuery\": At Query.viewer:Viewer.actor: Abstract type \"Actor\" does not allow concrete type \"LoggedOutUser\".",
+			"severity": "ERROR",
+			"path": ["viewer", "actor"]
+		}],
+		"extensions": {
+			"is_final": true
+		}
+	}
+}, {
+	"url": "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/58442184_2409355799095431_2135518564898045952_n.jpg?_nc_cat=100&_nc_ht=scontent-frt3-1.xx&oh=8a6aa37332eb950c7d3f00d4309afbe2&oe=5D56E365"
+}, {
+	"url": "https://www.facebook.com/api/graphql/",
+	"data": {
+		"data": {
+			"page": {
+				"past_events": {
+					"edges": [{
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "812465522441467",
+							"startTimestampForDisplay": 1557342000,
+							"time_range": {
+								"start": "2019-05-08T21:00:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Mi. 21:00 UTC+02",
+							"shortDateLabel": "Mi., 8. Mai",
+							"suggested_event_context_sentence": {
+								"text": "85 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Mittwochsbühne",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "214951248678776",
+								"name": "Mittwochsbühne",
+								"url": "https://www.facebook.com/mittwochsbuehne/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Simeon live im Café Haag",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": true,
+							"connectionStyle": "INTERESTED",
+							"eventID": "812465522441467",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHR9yJchMLTi1NQt-_u-tj2EBsdHVgpSnRdjbgCQeXrVHV4NZKY-_YrQAvIoDf2mFStmf00usYrF3Uz5Jn1QSFp-Q"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "837441226595936",
+							"startTimestampForDisplay": 1557045000,
+							"time_range": {
+								"start": "2019-05-05T10:30:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "So. 10:30 UTC+02",
+							"shortDateLabel": "So., 5. Mai",
+							"suggested_event_context_sentence": {
+								"text": "120 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Kino-Brunch im Atelier: Green Book",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": true,
+							"connectionStyle": "INTERESTED",
+							"eventID": "837441226595936",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHRN3buwbVTKSFLzbzSy2yyJ_EzYm83c11JUX413Kw6UBEDN0AuoeKjTB7paU9P9wbaKI1K3tt-8CYbb91pDePDlg"
+					}, {
+						"is_hidden_on_profile_calendar": false,
+						"is_added_to_profile_calendar": false,
+						"node": {
+							"id": "376476009623140",
+							"startTimestampForDisplay": 1556991000,
+							"time_range": {
+								"start": "2019-05-04T19:30:00+0200"
+							},
+							"timezone": "Europe/Berlin",
+							"happensOnSingleDay": true,
+							"childEvents": {
+								"count": 0
+							},
+							"is_event_draft": false,
+							"scheduled_publish_timestamp": 0,
+							"shortTimeLabel": "Sa. 19:30 UTC+02",
+							"shortDateLabel": "Sa., 4. Mai",
+							"suggested_event_context_sentence": {
+								"text": "7 Gäste"
+							},
+							"event_place": {
+								"__typename": "Page",
+								"contextual_name": "Café Haag",
+								"city": {
+									"cityContextualName": "Tübingen",
+									"id": "110776595613900",
+									"contextual_name": "Tübingen"
+								},
+								"id": "166834246680942",
+								"name": "Café Haag",
+								"url": "https://www.facebook.com/cafehaag/"
+							},
+							"event_viewer_capability": {
+								"is_viewer_admin": false,
+								"is_viewer_admin_no_business_permissions": false,
+								"can_viewer_edit": false,
+								"can_viewer_share": false,
+								"can_viewer_create_repeat_event": false,
+								"canViewerWatch": false
+							},
+							"is_canceled": false,
+							"imported_source_name": null,
+							"preassigned_discount_note": null,
+							"name": "Piano-Lounge mit Silian Frische",
+							"has_child_events": false,
+							"event_buy_ticket_url": null,
+							"can_viewer_purchase_onsite_tickets": false,
+							"tickets_type": "ONSITE_TICKET",
+							"canViewerJoin": false,
+							"isPast": true,
+							"connectionStyle": "INTERESTED",
+							"eventID": "376476009623140",
+							"watchStatus": "UNWATCHED",
+							"canJoin": false,
+							"__typename": "Event"
+						},
+						"cursor": "AQHRT3Is3Ts0bAueoBaS9AVpD9ERc8qzUsk1Nx8YAaMZ_A32shE-DTTCHmpahBRulj1XgkqMUXHzMtDFXQQLDPdLew"
+					}],
+					"page_info": {
+						"has_next_page": true,
+						"end_cursor": "AQHR61jdCtNyrThM4_u6cZtUPyk6i4f6QLdZ__mNlry9YNLXxuuVP5WZD0tsyeCCJz_X73nmcVqkZXNd7lQ7QeqbWA"
+					}
+				},
+				"id": "166834246680942",
+				"viewer_profile_permissions": [],
+				"admin_info": null
+			},
+			"viewer": {
+				"actor": null
+			}
+		},
+		"errors": [{
+			"message": "Errors while executing operation \"PageEventsTabPastEventsCardRendererQuery\": At Query.viewer:Viewer.actor: Abstract type \"Actor\" does not allow concrete type \"LoggedOutUser\".",
+			"severity": "ERROR",
+			"path": ["viewer", "actor"]
+		}],
+		"extensions": {
+			"is_final": true
+		}
+	}
+}]
+
