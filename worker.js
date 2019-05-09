@@ -113,7 +113,7 @@ eventQueue.process(1, async (job) => {
     })
   }).then((event) => {
     client.quit()
-    logger.info(`Successfully processed event with url ${event.url} and name ${event.url}`)
+    logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)
     return Promise.resolve(job)
   })
     .catch((err) => {
@@ -121,7 +121,7 @@ eventQueue.process(1, async (job) => {
       if (err.code === 'ERR_DUPLICATE') {
         logger.info(err.message)
       } else {
-        return Promise.reject(err) // Generic issue
+        throw err // Generic issue
       }
     })
 })
