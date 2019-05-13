@@ -49,7 +49,7 @@ eventQueue.on('error', (err) => logger.error(err))
  * - 4) post to endpoint
  * - 4) add to list of processed events
  */
-eventQueue.process(1, async (job) => {
+eventQueue.process(async (job) => {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
   const saddAsync = promisify(client.sadd).bind(client)
@@ -83,7 +83,7 @@ eventQueue.process(1, async (job) => {
       })
     }
   }).then((event) => {
-    if (event.city !== undefined) { // NOTE: DO NOT REMOVE FACEBOOK'S CITY ATTRIBUTE UNLESS YOU PLAN TO ADD SOMETHING ELSE TO DIFFERENTIATE BETWEEN OTHER AGGREGATOR'S
+    if (event.source.aggregator === 'Facebook') {
       logger.debug(`Fetching event details for facebook event ${event.url}`)
       return facebook.loadFromSource(event.url)
         .then((archive) => facebook.transFormToEventDetails(archive))
@@ -91,26 +91,30 @@ eventQueue.process(1, async (job) => {
           ...event,
           ...details
         }))
-    } else {
+    } else if (event.source.aggregator == 'iCal') {
       return Promise.resolve(event)
+    } else {
+      throw(new Error('Unsupported aggregator.'))
     }
   }).then((event) => { // Add event to endpoint and processed events
     return Promise.all([
       createEvents([event]),
       saddAsync('processed_events', event.url)
-    ]).catch((err) => {
-      if (err instanceof StatusCodeError) {
-        if (err.statusCode === 400) {
-          logger.debug(err.response)
-          logger.info(`Event with url ${event.url} has previously been added to the API.`)
-          return Promise.resolve(event)
+    ])
+      .then((results) => Promise.resolve(event))
+      .catch((err) => {
+        if (err instanceof StatusCodeError) {
+          if (err.statusCode === 400) {
+            logger.debug(err.response)
+            logger.info(`Event with url ${event.url} has previously been added to the API.`)
+            return Promise.resolve(event)
+          } else {
+            throw err
+          }
         } else {
           throw err
         }
-      } else {
-        throw err
-      }
-    })
+      })
   }).then((event) => {
     client.quit()
     logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)

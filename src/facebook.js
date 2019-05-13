@@ -31,7 +31,7 @@ function transFormToEventList (source) {
       return (s.data.data.page.upcoming_events) ? s.data.data.page.upcoming_events.edges : s.data.data.page.upcomingRecurringEvents.edges
     }).reduce(function (a, b) {
       return a.concat(b)
-    }, []).filter((e) => (typeof (e) !== 'undefined'))
+    }, []).filter((e) => (typeof (e.node.time_range) !== 'undefined'))
 
     resolve(edges.map((edge) => {
       return {
@@ -100,8 +100,7 @@ function transFormToEvent (data) {
     name: data.name,
     starts_at: new Date(data.time_range.start),
     url: `${EVENT_URL}${data.id}`,
-    location: data.event_place.name,
-    city: data.event_place.city.contextual_name
+    location: data.event_place.name
   })
 }
 
