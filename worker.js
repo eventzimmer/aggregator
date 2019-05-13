@@ -91,10 +91,10 @@ eventQueue.process(async (job) => {
           ...event,
           ...details
         }))
-    } else if (event.source.aggregator == 'iCal') {
+    } else if (event.source.aggregator === 'iCal') {
       return Promise.resolve(event)
     } else {
-      throw(new Error('Unsupported aggregator.'))
+      throw (new Error('Unsupported aggregator.'))
     }
   }).then((event) => { // Add event to endpoint and processed events
     return Promise.all([

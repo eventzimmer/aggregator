@@ -53,7 +53,7 @@ describe('facebook', function () {
         }
         let fixtures = JSON.parse(data.toString())
         facebook.transFormToEventList(fixtures).then((events) => {
-          expect(events).to.have.length(8)
+          expect(events).to.have.length(6)
           events.forEach((e) => {
             expect(e.id).to.be.a('string')
             expect(e.name).to.be.a('string')
