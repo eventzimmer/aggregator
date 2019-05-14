@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change schedule -2h to fit Ireland location
 - Make facebook transform more robust
 
+### Remove 
+- Removed Sentry because of privacy concerns
+
 ## [0.0.2] - 2019-04-29
 ### Added
 - Use Google drive for locations and sources
