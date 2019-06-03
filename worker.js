@@ -4,7 +4,7 @@ const Queue = require('bull')
 const bunyan = require('bunyan')
 const { StatusCodeError } = require('request-promise-native/errors')
 
-const { createClient, loadTSVFromUrl, LOCATIONS_URL } = require('./src/utils')
+const { createClient, loadTSVFromUrl, LOCATIONS_URL, customHeaderRequest } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
 const { currentSource } = require('./src/sources')
 const facebook = require('./src/facebook')
@@ -23,7 +23,7 @@ logger.info(`Initializing access token queue.`)
 const tokenQueue = new Queue('access_tokens', REDIS_URL)
 tokenQueue.on('error', (err) => logger.error(err))
 
-tokenQueue.process(async (job) => {
+tokenQueue.process((job) => {
   return requestToken().then(() => {
     logger.info(`Successfully updated access token`)
     return Promise.resolve(job)
@@ -42,7 +42,7 @@ eventQueue.on('error', (err) => logger.error(err))
  * - 4) post to endpoint
  * - 4) add to list of processed events
  */
-eventQueue.process(async (job) => {
+eventQueue.process((job) => {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
   const saddAsync = promisify(client.sadd).bind(client)
@@ -133,7 +133,7 @@ sourcesQueue.on('error', (err) => logger.error(err))
  * 2) Use the current source and fetch info from iCal or Facebook
  * 3) Populate events with source info and add them (with increasing delay) to the events queue
  */
-sourcesQueue.process(async (job) => {
+sourcesQueue.process((job) => {
   return currentSource().then((source) => {
     source = JSON.parse(source)
     logger.info(`Fetching source of type ${source[0]} with URL ${source[1]}`)
@@ -170,8 +170,17 @@ sourcesQueue.process(async (job) => {
   })
 })
 
-tokenQueue.add({}, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
+logger.info(`Initializing wakeup queue.`)
+const wakeUpQueue = new Queue('wakeup', REDIS_URL)
+wakeUpQueue.on('error', (err) => logger.error(err))
+
+wakeUpQueue.process((job) => {
+  return customHeaderRequest('https://eventzimmer-api.herokuapp.com/v1/locations')
+})
+
+tokenQueue.add(null, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
 sourcesQueue.add(null, {
   repeat: { cron: '*/10 0,7-21 * * *' },
   timeout: 120000 // kill jobs after two minutes to prevent memory leaks
 }) // Every 10 minutes.
+wakeUpQueue.add(null, { repeat: { cron: '*/30 * * * *' } }) // Every 30 minutes
