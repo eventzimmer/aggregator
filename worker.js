@@ -175,6 +175,7 @@ const wakeUpQueue = new Queue('wakeup', REDIS_URL)
 wakeUpQueue.on('error', (err) => logger.error(err))
 
 wakeUpQueue.process((job) => {
+  logger.info(`Waking up the API`)
   return customHeaderRequest('https://eventzimmer-api.herokuapp.com/v1/locations')
 })
 
