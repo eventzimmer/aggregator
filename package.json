@@ -2,8 +2,8 @@
   "name": "@eventzimmer/aggregator",
   "version": "1.0.0",
   "description": "An aggregator for the eventzimmer event service.",
-  "main": "worker.js",
   "scripts": {
+    "start": "node worker.js",
     "lint": "standard",
     "test": "mocha"
   },

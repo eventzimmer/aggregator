@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Wake up API every 30 minutes
+- Added docker-compose setup
 
 ### Changed
 - Change schedule -2h to fit Ireland location
