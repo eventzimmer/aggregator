@@ -4,7 +4,7 @@ const Queue = require('bull')
 const bunyan = require('bunyan')
 const { StatusCodeError } = require('request-promise-native/errors')
 
-const { createClient, loadTSVFromUrl, LOCATIONS_URL, customHeaderRequest } = require('./src/utils')
+const { createClient, LOCATIONS_URL, customHeaderRequest } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
 const { currentSource } = require('./src/sources')
 const facebook = require('./src/facebook')
@@ -56,24 +56,19 @@ eventQueue.process((job) => {
       error.code = 'ERR_DUPLICATE'
       throw error
     } else {
-      return loadTSVFromUrl(LOCATIONS_URL).then((locations) => {
-        locations = locations
-          .filter((l) => l.length === 3)
-          .filter((l) => !isNaN(l[1]) && !isNaN(l[2]))
-          .map((l) => l.map((i) => i.trim()))
-
-        let location = locations.find((l) => l[0] === event.location)
-        if (location !== undefined) {
-          event.location = {
-            name: location[0],
-            latitude: parseFloat(location[1]),
-            longitude: parseFloat(location[2])
-          }
-          return Promise.resolve(event)
-        } else {
-          throw (new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
-        }
+      return customHeaderRequest({
+        url: LOCATIONS_URL,
+        json: true
       })
+        .then((locations) => {
+          let location = locations.find((l) => l.name === event.location)
+          if (location !== undefined) {
+            event.location = location
+            return Promise.resolve(event)
+          } else {
+            throw (new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
+          }
+        })
     }
   }).then((event) => {
     if (event.source.aggregator === 'Facebook') {
@@ -136,28 +131,28 @@ sourcesQueue.on('error', (err) => logger.error(err))
 sourcesQueue.process((job) => {
   return currentSource().then((source) => {
     source = JSON.parse(source)
-    logger.info(`Fetching source of type ${source[0]} with URL ${source[1]}`)
-    if (source[0] === 'Facebook') {
+    logger.info(`Fetching source of type ${source.aggregator} with URL ${source.url}`)
+    if (source.aggregator === 'Facebook') {
       return Promise.all([
         Promise.resolve(source),
-        facebook.loadFromSource(source[1])
+        facebook.loadFromSource(source.url)
           .then((archive) => facebook.transFormToEventList(archive))
           .then((items) => Promise.all(items.map((item) => facebook.transFormToEvent(item))))
       ])
-    } else if (source[0] === 'iCal') {
+    } else if (source.aggregator === 'iCal') {
       return Promise.all([
         Promise.resolve(source),
-        iCal.loadFromSource(source[1])
+        iCal.loadFromSource(source.url)
           .then((archive) => {
             return iCal.transFormToEventList(archive)
           })
           .then((components) => Promise.all(components.map((component) => iCal.transFormToEvent(component))))
       ])
     } else {
-      throw (new Error(`Source of type ${source[0]} is currently not supported.`))
+      throw (new Error(`Source of type ${source.aggregator} is currently not supported.`))
     }
   }).then((results) => {
-    let source = { aggregator: results[0][0], url: results[0][1] }
+    let source = results[0]
     let events = results[1].map((e) => {
       e.source = source
       return e

@@ -46,28 +46,13 @@ function createClient () {
 exports.createClient = createClient
 
 /**
- * Returns a parsed TSV from the URL
- * @function
- * @param {String} url
- * @return {Promise<any>}
- */
-function loadTSVFromUrl (url) {
-  return customHeaderRequest(url).then((body) => {
-    let lines = body.split('\n')
-    return Promise.resolve(lines.slice(1).map((e) => e.split('\t')))
-  })
-}
-
-exports.loadTSVFromUrl = loadTSVFromUrl
-
-/**
  * Where to find the locations JSON
  * @type {string}
  */
-exports.LOCATIONS_URL = 'https://docs.google.com/spreadsheets/d/17Ov96OKzf3IpUlfQ5DUizx2ahsWNX3XCf8xkkkqaYuM/export?format=tsv'
+exports.LOCATIONS_URL = (process.env.LOCATIONS_URL !== undefined) ? process.env.LOCATIONS_URL : 'https://eventzimmer-api.herokuapp.com/v1/locations'
 
 /**
  * Where to find the sources JSON
  * @type {string}
  */
-exports.SOURCES_URL = 'https://docs.google.com/spreadsheets/d/14oeNUZ_nCOBp-Msoe_fgK5VtIe_h2cYafCj7u67dkIs/export?format=tsv'
+exports.SOURCES_URL = (process.env.SOURCES_URL !== undefined) ? process.env.SOURCES_URL : 'https://eventzimmer-api.herokuapp.com/v1/sources'

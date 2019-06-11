@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Remove 
 - Removed Sentry because of privacy concerns
+- Removed parseFromTSV method and replace with JSON list of sources and locations
 
 ## [0.0.2] - 2019-04-29
 ### Added

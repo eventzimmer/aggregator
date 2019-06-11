@@ -1,4 +1,4 @@
-const { createClient, loadTSVFromUrl, SOURCES_URL } = require('./utils')
+const { createClient, SOURCES_URL, customHeaderRequest } = require('./utils')
 const { promisify } = require('util')
 
 /**
@@ -16,9 +16,10 @@ function currentSource () {
 
     llenAsync('sources').then((response) => {
       if (response === 0) {
-        return loadTSVFromUrl(SOURCES_URL)
-          .then((sources) => Promise.resolve(sources.filter((s) => s.length === 2)))
-          .then((sources) => Promise.resolve(sources.map((s) => s.map((i) => i.trim()))))
+        return customHeaderRequest({
+          url: SOURCES_URL,
+          json: true
+        })
           .then((sources) => lpushAsync('sources', ...sources.map((s) => JSON.stringify(s))))
       } else {
         return Promise.resolve()
