@@ -1,7 +1,7 @@
 const { recordResponses } = require('./puppeteer')
 const GRAPHQL_URL = 'https://www.facebook.com/api/graphql/'
 const EVENT_URL = 'https://facebook.com/events/'
-const SCONTENT_URL = 'https://scontent'
+// const SCONTENT_URL = 'https://scontent'
 
 /**
  * Sends a request to Facebook retrieving a list of events for the page
@@ -57,9 +57,9 @@ exports.transFormToEventList = transFormToEventList
  */
 function transFormToEventDetails (source) {
   return new Promise((resolve, reject) => {
-    let images = source.filter((s) => {
+    /* let images = source.filter((s) => {
       return (s.url.startsWith(SCONTENT_URL))
-    })
+    }) */
 
     let queries = source.filter((s) => {
       return (s.url === GRAPHQL_URL)
@@ -75,13 +75,13 @@ function transFormToEventDetails (source) {
     // Thanks Facebook for making user friendly, easy-to-predict apps (:
     if (queries.length) {
       resolve({
-        description: queries.shift().data.event.details.text,
-        images: [images.shift().url]
+        description: queries.shift().data.event.details.text
+        // images: [images.shift().url]
       })
     } else {
       resolve({
-        description: '',
-        images: [images.shift().url]
+        description: ''
+        // images: [images.shift().url]
       })
     }
   })

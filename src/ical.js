@@ -58,8 +58,8 @@ function transFormToEvent (source) {
     description: event.description,
     starts_at: event.startDate.toJSDate(),
     location: (event.location !== null) ? event.location : parentOrganizer,
-    url: event.component.getFirstPropertyValue('url'),
-    images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : []
+    url: event.component.getFirstPropertyValue('url')
+    // images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : []
   })
 }
 
