@@ -63,9 +63,9 @@ eventQueue.process((job) => {
         .then((locations) => {
           let location = locations.find((l) => l.name === event.location)
           if (location !== undefined) {
-            event.location = location
             return Promise.resolve(event)
           } else {
+            // TODO: Add event to proposed_events here
             throw (new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
           }
         })
@@ -84,6 +84,9 @@ eventQueue.process((job) => {
     } else {
       throw (new Error('Unsupported aggregator.'))
     }
+  }).then((event) => { // Reduce source to source url
+    event.source = event.source.url
+    return Promise.resolve(event)
   }).then((event) => { // Add event to endpoint and processed events
     return Promise.all([
       createEvents([event]),
@@ -165,18 +168,9 @@ sourcesQueue.process((job) => {
   })
 })
 
-logger.info(`Initializing wakeup queue.`)
-const wakeUpQueue = new Queue('wakeup', REDIS_URL)
-wakeUpQueue.on('error', (err) => logger.error(err))
-
-wakeUpQueue.process((job) => {
-  logger.info(`Waking up the API`)
-  return customHeaderRequest('https://eventzimmer-api.herokuapp.com/v1/locations')
-})
-
 tokenQueue.add(null, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
+tokenQueue.add(null)
 sourcesQueue.add(null, {
   repeat: { cron: '*/10 0,7-21 * * *' },
   timeout: 120000 // kill jobs after two minutes to prevent memory leaks
 }) // Every 10 minutes.
-wakeUpQueue.add(null, { repeat: { cron: '*/30 * * * *' } }) // Every 30 minutes

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make facebook transform more robust
 
 ### Remove 
+- Remove wakeup queue
 - Removed Sentry because of privacy concerns
 - Removed parseFromTSV method and replace with JSON list of sources and locations
 
