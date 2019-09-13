@@ -100,6 +100,8 @@ eventQueue.process((job) => {
             logger.info(`Event with url ${event.url} has previously been added to the API.`)
             return Promise.resolve(event)
           } else {
+            logger.debug(err.statusCode)
+            logger.debug(err.response)
             throw err
           }
         } else {

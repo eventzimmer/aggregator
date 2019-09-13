@@ -3,7 +3,7 @@ const { promisify } = require('util')
 const request = require('./utils').customHeaderRequest
 const { createClient } = require('./utils')
 
-const ENDPOINT_URL = (process.env.ENDPOINT_URL !== undefined) ? process.env.ENDPOINT_URL : 'http://localhost:8080/v1'
+const ENDPOINT_URL = (process.env.ENDPOINT_URL !== undefined) ? process.env.ENDPOINT_URL : 'http://localhost:3000'
 const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
 
 /**
@@ -16,9 +16,9 @@ function createEvents (events) {
   return new Promise((resolve, reject) => {
     const client = createClient()
     const getAsync = promisify(client.get).bind(client)
-    getAsync('access_token').then((response) => {
-      return Promise.resolve((response === null) ? 'testToken' : response)
-    }).then((token) => {
+    getAsync('access_token')
+    .then((token) => {
+      console.log(token)
       return request.post(`${ENDPOINT_URL}/events`, {
         auth: {
           bearer: token
@@ -29,15 +29,15 @@ function createEvents (events) {
         resolveWithFullResponse: true
       })
     }).then((response) => {
-      client.quit()
       if (response.statusCode === 201) {
         resolve(response.body)
       } else {
         reject(response.body)
       }
     }).catch((err) => {
-      client.quit()
       reject(err)
+    }).finally(() => {
+      client.quit()
     })
   })
 }
