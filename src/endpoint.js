@@ -17,28 +17,28 @@ function createEvents (events) {
     const client = createClient()
     const getAsync = promisify(client.get).bind(client)
     getAsync('access_token')
-    .then((token) => {
-      console.log(token)
-      return request.post(`${ENDPOINT_URL}/events`, {
-        auth: {
-          bearer: token
-        },
-        method: 'POST',
-        body: JSON.stringify(events),
-        headers: { 'Content-Type': 'application/json' },
-        resolveWithFullResponse: true
+      .then((token) => {
+        console.log(token)
+        return request.post(`${ENDPOINT_URL}/events`, {
+          auth: {
+            bearer: token
+          },
+          method: 'POST',
+          body: JSON.stringify(events),
+          headers: { 'Content-Type': 'application/json' },
+          resolveWithFullResponse: true
+        })
+      }).then((response) => {
+        if (response.statusCode === 201) {
+          resolve(response.body)
+        } else {
+          reject(response.body)
+        }
+      }).catch((err) => {
+        reject(err)
+      }).finally(() => {
+        client.quit()
       })
-    }).then((response) => {
-      if (response.statusCode === 201) {
-        resolve(response.body)
-      } else {
-        reject(response.body)
-      }
-    }).catch((err) => {
-      reject(err)
-    }).finally(() => {
-      client.quit()
-    })
   })
 }
 
