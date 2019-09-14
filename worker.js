@@ -92,15 +92,13 @@ eventQueue.process((job) => {
       createEvents([event]),
       saddAsync('processed_events', event.url)
     ])
-      .then((results) => Promise.resolve(event))
+      .then(() => Promise.resolve(event))
       .catch((err) => {
         if (err instanceof StatusCodeError) {
-          if (err.statusCode === 400) {
-            logger.debug(err.response)
+          if (err.statusCode === 409) {
             logger.info(`Event with url ${event.url} has previously been added to the API.`)
             return Promise.resolve(event)
           } else {
-            logger.debug(err.statusCode)
             logger.debug(err.response)
             throw err
           }
@@ -109,17 +107,17 @@ eventQueue.process((job) => {
         }
       })
   }).then((event) => {
-    client.quit()
     logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)
     return Promise.resolve(job)
   })
     .catch((err) => {
-      client.quit()
       if (err.code === 'ERR_DUPLICATE') {
         logger.info(err.message)
       } else {
-        throw err // Generic issue
+        logger.error(err) // Other issue which is not handled
       }
+    }).finally(() => {
+      client.quit()
     })
 })
 
