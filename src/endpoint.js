@@ -1,9 +1,8 @@
 const process = require('process')
 const { promisify } = require('util')
 const request = require('./utils').customHeaderRequest
-const { createClient } = require('./utils')
+const { createClient, ENDPOINT_URL } = require('./utils')
 
-const ENDPOINT_URL = (process.env.ENDPOINT_URL !== undefined) ? process.env.ENDPOINT_URL : 'http://localhost:3000'
 const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
 
 /**
