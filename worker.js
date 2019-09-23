@@ -2,7 +2,6 @@ const { promisify } = require('util')
 
 const Queue = require('bull')
 const bunyan = require('bunyan')
-const { StatusCodeError } = require('request-promise-native/errors')
 
 const { createClient, LOCATIONS_URL, customHeaderRequest } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
@@ -23,11 +22,10 @@ logger.info(`Initializing access token queue.`)
 const tokenQueue = new Queue('access_tokens', REDIS_URL)
 tokenQueue.on('error', (err) => logger.error(err))
 
-tokenQueue.process((job) => {
-  return requestToken().then(() => {
-    logger.info(`Successfully updated access token`)
-    return Promise.resolve(job)
-  })
+tokenQueue.process(async (job) => {
+  await requestToken()
+  logger.info(`Successfully updated access token`)
+  return job
 })
 
 logger.info(`Initializing events queue`)
@@ -42,83 +40,44 @@ eventQueue.on('error', (err) => logger.error(err))
  * - 4) post to endpoint
  * - 4) add to list of processed events
  */
-eventQueue.process((job) => {
+eventQueue.process(async (job) => {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
-  const saddAsync = promisify(client.sadd).bind(client)
   let event = job.data
   logger.debug(event)
   logger.info(`Received event with url ${event.url}`)
 
-  return sismemberAsync('processed_events', event.url).then((count) => { // Check if it has been processed before
-    if (count) {
-      let error = new Error(`A event with url ${event.url} and name ${event.name} exists already.`)
-      error.code = 'ERR_DUPLICATE'
-      throw error
-    } else {
-      return customHeaderRequest({
-        url: LOCATIONS_URL,
-        json: true
-      })
-        .then((locations) => {
-          let location = locations.find((l) => l.name === event.location)
-          if (location !== undefined) {
-            return Promise.resolve(event)
-          } else {
-            // TODO: Add event to proposed_events here
-            throw (new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`))
-          }
-        })
-    }
-  }).then((event) => {
-    if (event.source.aggregator === 'Facebook') {
-      logger.debug(`Fetching event details for facebook event ${event.url}`)
-      return facebook.loadFromSource(event.url)
-        .then((archive) => facebook.transFormToEventDetails(archive))
-        .then((details) => Promise.resolve({
-          ...event,
-          ...details
-        }))
-    } else if (event.source.aggregator === 'iCal') {
-      return Promise.resolve(event)
-    } else {
-      throw (new Error('Unsupported aggregator.'))
-    }
-  }).then((event) => { // Reduce source to source url
-    event.source = event.source.url
-    return Promise.resolve(event)
-  }).then((event) => { // Add event to endpoint and processed events
-    return Promise.all([
-      createEvents([event]),
-      saddAsync('processed_events', event.url)
-    ])
-      .then(() => Promise.resolve(event))
-      .catch((err) => {
-        if (err instanceof StatusCodeError) {
-          if (err.statusCode === 409) {
-            logger.info(`Event with url ${event.url} has previously been added to the API.`)
-            return Promise.resolve(event)
-          } else {
-            logger.debug(err.response)
-            throw err
-          }
-        } else {
-          throw err
-        }
-      })
-  }).then((event) => {
-    logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)
-    return Promise.resolve(job)
+  const count = await sismemberAsync('processed_events', event.url)
+  if (count) {
+    throw new Error(`A event with url ${event.url} and name ${event.name} exists already.`)
+  }
+  const locations = await customHeaderRequest({
+    url: LOCATIONS_URL,
+    json: true
   })
-    .catch((err) => {
-      if (err.code === 'ERR_DUPLICATE') {
-        logger.info(err.message)
-      } else {
-        logger.error(err) // Other issue which is not handled
-      }
-    }).finally(() => {
-      client.quit()
-    })
+  const location = locations.find((l) => l.name === event.location)
+  if (location === undefined) {
+    throw new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`)
+  }
+  if (event.source.aggregator === 'Facebook') {
+    const archive = await facebook.loadFromSource(event.url)
+    const details = await facebook.transFormToEventDetails(archive)
+    event = {
+      ...event,
+      ...details
+    }
+  } else if (event.source.aggregator !== 'iCal') {
+    throw new Error('Unsupported aggregator.')
+  }
+  event.source = event.source.url
+  const saddAsync = promisify(client.sadd).bind(client)
+  await saddAsync('processed_events', event.url)
+  client.quit()
+  const response = await createEvents([event])
+  if (response.status === 409) {
+    throw new Error(`Event with url ${event.url} has previously been added to the API.`)
+  }
+  logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)
 })
 
 logger.info(`Initializing sources queue.`)
@@ -131,41 +90,38 @@ sourcesQueue.on('error', (err) => logger.error(err))
  * 2) Use the current source and fetch info from iCal or Facebook
  * 3) Populate events with source info and add them (with increasing delay) to the events queue
  */
-sourcesQueue.process((job) => {
-  return currentSource().then((source) => {
-    source = JSON.parse(source)
-    logger.info(`Fetching source of type ${source.aggregator} with URL ${source.url}`)
-    if (source.aggregator === 'Facebook') {
-      return Promise.all([
-        Promise.resolve(source),
-        facebook.loadFromSource(source.url)
-          .then((archive) => facebook.transFormToEventList(archive))
-          .then((items) => Promise.all(items.map((item) => facebook.transFormToEvent(item))))
-      ])
-    } else if (source.aggregator === 'iCal') {
-      return Promise.all([
-        Promise.resolve(source),
-        iCal.loadFromSource(source.url)
-          .then((archive) => {
-            return iCal.transFormToEventList(archive)
-          })
-          .then((components) => Promise.all(components.map((component) => iCal.transFormToEvent(component))))
-      ])
-    } else {
-      throw (new Error(`Source of type ${source.aggregator} is currently not supported.`))
-    }
-  }).then((results) => {
-    let source = results[0]
-    let events = results[1].map((e) => {
-      e.source = source
-      return e
-    })
-    logger.debug(`Fetched ${events.length} events and added them to the queue.`)
-    return Promise.resolve(events.map((e, index) => eventQueue.add(e, { delay: index * 10000 })))
-  }).catch((err) => {
-    logger.error(err)
-    throw err
+sourcesQueue.process(async (job) => {
+  let source = await currentSource()
+  source = JSON.parse(source)
+  logger.info(`Fetching source of type ${source.aggregator} with URL ${source.url}`)
+  let events = []
+  if (source.aggregator === 'Facebook') {
+    let archive = await facebook.loadFromSource(source.url)
+    let items = await facebook.transFormToEventList(archive)
+    await Promise.all(items.map(async (item) => {
+      const event = await facebook.transFormToEvent(item)
+      events.push(event)
+      return event
+    }))
+  } else if (source.aggregator === 'iCal') {
+    const archive = await iCal.loadFromSource(source.url)
+    let items = iCal.transFormToEventList(archive)
+    await Promise.all(items.map(async (item) => {
+      let event = await iCal.transFormToEvent(item)
+      events.push(event)
+      return event
+    }))
+  } else {
+    throw (new Error(`Source of type ${source.aggregator} is currently not supported.`))
+  }
+  events.forEach((e) => {
+    e.source = source
   })
+  logger.debug(`Fetched ${events.length} events and added them to the queue.`)
+  events.forEach((e, index) => {
+    eventQueue.add(e, { delay: index * 10000 })
+  })
+  return job
 })
 
 tokenQueue.add(null, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
