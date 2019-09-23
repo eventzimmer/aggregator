@@ -2,14 +2,13 @@ const process = require('process')
 const puppeteer = require('puppeteer')
 
 const GRAPHQL_URL = 'https://www.facebook.com/api/graphql/'
-const SCONTENT_URL = 'https://scontent'
 
 /**
  * Records API and SCONTENT responses
  * @param {string} url
- * @return {Promise<any>}
+ * @return {Promise<Array<any>>}
  */
-function recordResponses (url) {
+async function recordResponses (url) {
   // list of events for converting to HAR
   let responses = []
   let args = ['--no-sandbox', '--disable-setuid-sandbox']
@@ -19,36 +18,24 @@ function recordResponses (url) {
     args.push(`--proxy-server=${proxy}`)
   }
 
-  return puppeteer.launch({
+  const browser = await puppeteer.launch({
     args: args
   })
-    .then((browser) => Promise.all([Promise.resolve(browser), browser.newPage()]))
-    .then((values) => {
-      let browser = values[0]
-      let page = values[1]
-
-      page.on('response', (response) => {
-        if (response.url() === GRAPHQL_URL) {
-          response.json().then((data) => {
-            responses.push({
-              url: response.url(),
-              data: data
-            })
-          }).catch((err) => {
-            console.debug(err) // This issue is not interesting. Failed responses will simply be ignored.
-          })
-        } else if (response.url().startsWith(SCONTENT_URL)) {
-          responses.push({
-            url: response.url()
-          })
-        }
+  const page = await browser.newPage()
+  page.on('response', async (response) => {
+    if (response.url() === GRAPHQL_URL) {
+      let data = await response.json()
+      responses.push({
+        url: response.url(),
+        data: data
       })
+    }
+  })
 
-      return page.goto(url)
-        .then(() => page.waitFor(5000))
-        .then(() => browser.close())
-        .then(() => Promise.resolve(responses))
-    })
+  await page.goto(url)
+  await page.waitFor(5000)
+  await browser.close()
+  return responses
 }
 
 exports.recordResponses = recordResponses
