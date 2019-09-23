@@ -56,10 +56,10 @@ exports.ENDPOINT_URL = ENDPOINT_URL
  * Where to find the locations JSON
  * @type {string}
  */
-exports.LOCATIONS_URL = (process.env.LOCATIONS_URL !== undefined) ? process.env.LOCATIONS_URL : `${ENDPOINT_URL}/locations`
+exports.LOCATIONS_URL = `${ENDPOINT_URL}/locations`
 
 /**
  * Where to find the sources JSON
  * @type {string}
  */
-exports.SOURCES_URL = (process.env.SOURCES_URL !== undefined) ? process.env.SOURCES_URL : `${ENDPOINT_URL}/sources`
+exports.SOURCES_URL = `${ENDPOINT_URL}/sources`

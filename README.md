@@ -19,9 +19,7 @@ Using below environment variables `aggregator` can be configured:
 | environment variable | description                                           | default                                            |
 |----------------------|-------------------------------------------------------|----------------------------------------------------|
 | REDIS_URL            | Where to find redis                                   | redis://localhost:6379/1                           |
-| ENDPOINT_URL         | Where to find the eventzimmer API                     | http://localhost:8080/v1                           |
-| LOCATIONS_URL        | Where to find the list of locations                   | https://eventzimmer-api.herokuapp.com/v1/locations |
-| SOURCES_URL          | Where to find the list of sources                     | https://eventzimmer-api.herokuapp.com/v1/sources   |
+| ENDPOINT_URL         | Where to find the eventzimmer API                     | http://localhost:3000                           |
 | CLIENT_ID            | The client ID to use for JWT auth                     | -                                                  |
 | CLIENT_SECRET        | The client secret to use for JWT auth                 | -                                                  |
 | HTTP_PROXY           | Whether to use a http proxy for Facebook aggregation  | -                                                  |
