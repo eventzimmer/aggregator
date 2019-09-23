@@ -20,26 +20,20 @@ exports.loadFromSource = loadFromSource
  * @see {@link http://mozilla-comm.github.io/ical.js/api/ICAL.Component.html}
  * @return {Promise<Array<Component>>}
  */
-function transFormToEventList (source) {
-  return new Promise((resolve, reject) => {
-    try {
-      let vData = parse(source)
-      let calendar = new Component(vData)
-      let prodid = calendar.getFirstPropertyValue('prodid')
-      if (prodid.includes('Google Inc') && prodid.includes('Google Calendar')) { // Add missing event URL's to Google calendar
-        let timezone = calendar.getFirstPropertyValue('x-wr-timezone')
-        resolve(calendar.getAllSubcomponents().map((component) => {
-          let uid = component.getFirstPropertyValue('uid')
-          component.addPropertyWithValue('url', `https://www.google.com/calendar/event?eid=${uid}&ctz=${timezone}`)
-          return component
-        }))
-      } else {
-        resolve(calendar.getAllSubcomponents())
-      }
-    } catch (err) {
-      reject(err)
-    }
-  })
+async function transFormToEventList (source) {
+  let vData = parse(source)
+  let calendar = new Component(vData)
+  let prodid = calendar.getFirstPropertyValue('prodid')
+  if (prodid.includes('Google Inc') && prodid.includes('Google Calendar')) { // Add missing event URL's to Google calendar
+    let timezone = calendar.getFirstPropertyValue('x-wr-timezone')
+    return calendar.getAllSubcomponents().map((component) => {
+      let uid = component.getFirstPropertyValue('uid')
+      component.addPropertyWithValue('url', `https://www.google.com/calendar/event?eid=${uid}&ctz=${timezone}`)
+      return component
+    })
+  } else {
+    return calendar.getAllSubcomponents()
+  }
 }
 
 exports.transFormToEventList = transFormToEventList
@@ -50,17 +44,17 @@ exports.transFormToEventList = transFormToEventList
  * @param {Component} source
  * @return {Promise<Object>}
  */
-function transFormToEvent (source) {
+async function transFormToEvent (source) {
   let event = new Event(source)
   let parentOrganizer = event.component.parent.getFirstPropertyValue('x-wr-calname')
-  return Promise.resolve({
+  return {
     name: event.summary,
     description: event.description,
     starts_at: event.startDate.toJSDate(),
     location: (event.location !== null) ? event.location : parentOrganizer,
     url: event.component.getFirstPropertyValue('url')
     // images: (event.component.hasProperty('attach')) ? [event.component.getFirstPropertyValue('attach')].join(';') : []
-  })
+  }
 }
 
 exports.transFormToEvent = transFormToEvent
