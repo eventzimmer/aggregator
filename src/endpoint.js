@@ -51,14 +51,10 @@ async function requestToken () {
         grant_type: 'client_credentials'
       }
     })
-    if (response.status === 200) {
-      const client = createClient()
-      const setAsync = promisify(client.set).bind(client)
-      await setAsync(response.body.access_token)
-      client.quit()
-    } else {
-      throw new Error(response.statusText)
-    }
+    const client = createClient()
+    const setAsync = promisify(client.set).bind(client)
+    await setAsync('access_token', response.access_token)
+    client.quit()
   } else {
     throw new Error('CLIENT_ID or CLIENT_SECRET not specified!')
   }
