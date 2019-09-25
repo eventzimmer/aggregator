@@ -19,10 +19,15 @@ let logger = bunyan.createLogger({
 
 // Initialize access token queue
 logger.info(`Initializing access token queue.`)
-const tokenQueue = new Queue('access_tokens', REDIS_URL)
-tokenQueue.on('error', (err) => logger.error(err))
+function handleError (job, err) {
+  logger.error(err)
+}
 
-tokenQueue.process(async (job) => {
+const tokenQueue = new Queue('access_tokens', REDIS_URL)
+
+tokenQueue.on('failed', handleError)
+
+tokenQueue.process(async function (job) {
   await requestToken()
   logger.info(`Successfully updated access token`)
   return job
@@ -30,7 +35,7 @@ tokenQueue.process(async (job) => {
 
 logger.info(`Initializing events queue`)
 const eventQueue = new Queue('events', REDIS_URL)
-eventQueue.on('error', (err) => logger.error(err))
+eventQueue.on('failed', handleError)
 
 /**
  * Adding a new event is done in 4 stages
@@ -40,7 +45,7 @@ eventQueue.on('error', (err) => logger.error(err))
  * - 4) post to endpoint
  * - 4) add to list of processed events
  */
-eventQueue.process(async (job) => {
+eventQueue.process(async function (job) {
   const client = createClient()
   const sismemberAsync = promisify(client.sismember).bind(client)
   let event = job.data
@@ -78,11 +83,12 @@ eventQueue.process(async (job) => {
     throw new Error(`Event with url ${event.url} has previously been added to the API.`)
   }
   logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)
+  return job
 })
 
 logger.info(`Initializing sources queue.`)
 const sourcesQueue = new Queue('sources', REDIS_URL)
-sourcesQueue.on('error', (err) => logger.error(err))
+sourcesQueue.on('failed', handleError)
 
 /**
  * Fetching a source is done in 3 stages
@@ -90,7 +96,7 @@ sourcesQueue.on('error', (err) => logger.error(err))
  * 2) Use the current source and fetch info from iCal or Facebook
  * 3) Populate events with source info and add them (with increasing delay) to the events queue
  */
-sourcesQueue.process(async (job) => {
+sourcesQueue.process(async function (job) {
   let source = await currentSource()
   source = JSON.parse(source)
   logger.info(`Fetching source of type ${source.aggregator} with URL ${source.url}`)
@@ -124,9 +130,8 @@ sourcesQueue.process(async (job) => {
   return job
 })
 
-tokenQueue.add(null, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-tokenQueue.add(null)
-sourcesQueue.add(null, {
+tokenQueue.add({ repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
+sourcesQueue.add({
   repeat: { cron: '*/10 0,7-21 * * *' },
   timeout: 120000 // kill jobs after two minutes to prevent memory leaks
 }) // Every 10 minutes.
