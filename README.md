@@ -12,6 +12,24 @@ A high level overview of the queues can be found in the diagram below:
 
 To aggregate info we use [puppeteer](https://github.com/GoogleChrome/puppeteer) and [request](https://github.com/request/request).
 
+## Getting started
+
+To get a local version of `aggregator` you will need two things:
+
+- a [working setup](https://github.com/eventzimmer/schema/blob/master/SETUP.md) of `schema`
+- a [Redis](https://redis.io) server. I use `docker run -it --rm -p 6379:6378 redis` and it works like a charm
+
+Once everything is in order, run:
+
+```
+git clone https://github.com/eventzimmer/aggregator.git
+cd aggregator
+npm install
+CLIENT_ID=yourauth0id CLIENT_SECRET=yourauth0secret node worker.js # you can use the --inspect flag for remote debugging
+```
+
+This will fire up a `aggregator` instance. The commands in `cli` can be used to add new tasks to the queue, which is indeed helpful for debugging. 
+
 ### Configuration
 
 Using below environment variables `aggregator` can be configured:
@@ -19,7 +37,7 @@ Using below environment variables `aggregator` can be configured:
 | environment variable | description                                           | default                                            |
 |----------------------|-------------------------------------------------------|----------------------------------------------------|
 | REDIS_URL            | Where to find redis                                   | redis://localhost:6379/1                           |
-| ENDPOINT_URL         | Where to find the eventzimmer API                     | http://localhost:3000                           |
+| ENDPOINT_URL         | Where to find the eventzimmer API                     | http://localhost:3000                              |
 | CLIENT_ID            | The client ID to use for JWT auth                     | -                                                  |
 | CLIENT_SECRET        | The client secret to use for JWT auth                 | -                                                  |
 | HTTP_PROXY           | Whether to use a http proxy for Facebook aggregation  | -                                                  |
