@@ -1,5 +1,4 @@
 const process = require('process')
-const { promisify } = require('util')
 const request = require('./utils').customHeaderRequest
 const { ENDPOINT_URL } = require('./utils')
 
@@ -13,8 +12,7 @@ const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
  * @return {Promise<any>}
  */
 async function createEvents (events, client) {
-  const getAsync = promisify(client.get).bind(client)
-  const token = await getAsync('access_token')
+  const token = await client.get('access_token')
   const response = await request.post(`${ENDPOINT_URL}/events`, {
     auth: {
       bearer: token

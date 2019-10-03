@@ -1,5 +1,4 @@
 const { SOURCES_URL, customHeaderRequest } = require('./utils')
-const { promisify } = require('util')
 
 /**
  * Returns the latest source from redis.
@@ -9,19 +8,15 @@ const { promisify } = require('util')
  * @return {Promise<Object>}
  */
 async function currentSource (client) {
-  const llenAsync = promisify(client.llen).bind(client)
-  const lpushAsync = promisify(client.lpush).bind(client)
-  const lpopAsync = promisify(client.lpop).bind(client)
-
-  const response = await llenAsync('sources')
+  const response = await client.llen('sources')
   if (response === 0) {
     let sources = await customHeaderRequest({
       url: SOURCES_URL,
       json: true
     })
-    await lpushAsync('sources', ...sources.map((s) => JSON.stringify(s)))
+    await client.lpush('sources', ...sources.map((s) => JSON.stringify(s)))
   }
-  return lpopAsync('sources')
+  return client.lpop('sources')
 }
 
 exports.currentSource = currentSource

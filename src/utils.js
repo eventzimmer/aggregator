@@ -17,7 +17,9 @@
  */
 const process = require('process')
 const request = require('request-promise-native')
-const redis = require('redis')
+const redis = require('async-redis')
+
+const logger = require('./logger')
 
 // NOTE: See https://stackoverflow.com/questions/38073527/request-how-to-set-user-agent-for-every-request/38074818#38074818
 const customHeaderRequest = request.defaults({
@@ -34,11 +36,11 @@ exports.customHeaderRequest = customHeaderRequest
  * @return RedisClient
  */
 function createClient () {
-  let client = redis.createClient({
+  const client = redis.createClient({
     url: (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL : 'redis://localhost:6379/1'
   })
-  client.on('error', function () {
-    process.exit(1)
+  client.on('error', async function (err) {
+    logger.error(err)
   })
   return client
 }
