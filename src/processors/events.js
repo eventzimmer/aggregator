@@ -8,11 +8,12 @@ module.exports = async function (job) {
   logger.info(`Received event with url ${event.url}`)
 
   const locations = await customHeaderRequest({
-    url: LOCATIONS_URL,
+    url: `${LOCATIONS_URL}?${new URLSearchParams({
+      name: `eq.${event.location}`
+    }).toString()}`,
     json: true
   })
-  const location = locations.find((l) => l.name === event.location)
-  if (location === undefined) {
+  if (!locations.length) {
     throw new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`)
   }
   if (event.source.aggregator === 'Facebook') {

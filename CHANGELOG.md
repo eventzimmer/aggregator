@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added yargs based command line
 
 ### Changed
+- Use vertical filtering to find location
 - Do not process or POST images any longer
 - Refactor logic to use async/await and properly use bull queues
 
