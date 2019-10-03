@@ -16,9 +16,6 @@ function handleError (job, err) {
   logger.error(err)
 }
 
-/**
- *
- */
 logger.info(`Initializing token queue.`)
 const tokenQueue = new Queue('tokens', REDIS_URL)
 tokenQueue.on('failed', handleError)
@@ -97,8 +94,7 @@ currentSourceQueue.on('completed', (job, result) => {
 })
 
 currentSourceQueue.add({
-  repeat: { cron: '*/10 0,7-21 * * *' },
-  timeout: 120000 // kill jobs after two minutes to prevent memory leaks
+  repeat: { cron: '*/10 0,7-21 * * *' }
 }) // Every 10 minutes.
 
 process.on('SIGTERM', () => {

@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added yargs based command line
+
 ### Changed
 - Do not process or POST images any longer
 - Refactor logic to use async/await and properly use bull queues

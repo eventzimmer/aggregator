@@ -28,12 +28,3 @@ module.exports = async function (job) {
   event.source = event.source.url
   return event
 }
-
-/**
- * Adding a new event is done in 4 stages
- * - 1) check if event URL has previously been processed
- * - 2) (check if location is valid)
- * - 3) if aggregated via Facebook => retrieve details
- * - 4) post to endpoint
- * - 4) add to list of processed events
- */
