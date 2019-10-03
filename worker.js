@@ -36,14 +36,16 @@ eventsQueue.on('failed', handleError)
 
 eventsQueue.process(processEvent)
 
-eventsQueue.on('active', async (job, jobPromise) => {
+eventsQueue.on('active', async (job) => {
   const client = createClient()
   const event = job.data
 
   const count = await client.sismember('processed_events', event.url)
   if (count) {
-    logger.debug(`A event with url ${event.url} and name ${event.name} exists already.`)
-    jobPromise.cancel()
+    const message = `A event with url ${event.url} and name ${event.name} exists already.`
+    logger.info(message)
+    await job.discard()
+    await job.moveToFailed(new Error(message))
   }
   await client.quit()
 })
