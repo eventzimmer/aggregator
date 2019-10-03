@@ -1,14 +1,14 @@
-const { createClient, SOURCES_URL, customHeaderRequest } = require('./utils')
+const { SOURCES_URL, customHeaderRequest } = require('./utils')
 const { promisify } = require('util')
 
 /**
  * Returns the latest source from redis.
  * Populates the "sources" key in redis with a new list of sources if it is empty.
  * @function
+ * @param {Object} client
  * @return {Promise<Object>}
  */
-async function currentSource () {
-  const client = createClient()
+async function currentSource (client) {
   const llenAsync = promisify(client.llen).bind(client)
   const lpushAsync = promisify(client.lpush).bind(client)
   const lpopAsync = promisify(client.lpop).bind(client)
@@ -21,9 +21,7 @@ async function currentSource () {
     })
     await lpushAsync('sources', ...sources.map((s) => JSON.stringify(s)))
   }
-  let source = await lpopAsync('sources')
-  client.quit()
-  return source
+  return lpopAsync('sources')
 }
 
 exports.currentSource = currentSource

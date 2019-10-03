@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Do not process or POST images any longer
+- Refactor logic to use async/await and properly use bull queues
 
 ## [0.0.3] - 2019-06-12
 ### Added

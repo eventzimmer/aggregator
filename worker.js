@@ -1,137 +1,107 @@
 const { promisify } = require('util')
-
 const Queue = require('bull')
-const bunyan = require('bunyan')
+const errors = require('request-promise-native/errors')
 
-const { createClient, LOCATIONS_URL, customHeaderRequest } = require('./src/utils')
+const processSource = require('./src/processors/sources')
+const processEvent = require('./src/processors/events')
+const { createClient } = require('./src/utils')
 const { requestToken, createEvents } = require('./src/endpoint')
 const { currentSource } = require('./src/sources')
-const facebook = require('./src/facebook')
-const iCal = require('./src/ical')
+const logger = require('./src/logger')
 
 const REDIS_URL = (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL : 'redis://localhost:6379/1'
+const client = createClient()
 
-// Initialize logging
-let logger = bunyan.createLogger({
-  name: '@eventzimmer/aggregator',
-  level: (process.env.LOG_LEVEL !== undefined) ? process.env.LOG_LEVEL : 'debug'
-})
-
-// Initialize access token queue
-logger.info(`Initializing access token queue.`)
 function handleError (job, err) {
   logger.error(err)
 }
 
-const tokenQueue = new Queue('access_tokens', REDIS_URL)
-
+/**
+ *
+ */
+logger.info(`Initializing token queue.`)
+const tokenQueue = new Queue('tokens', REDIS_URL)
 tokenQueue.on('failed', handleError)
 
-tokenQueue.process(async function (job) {
-  await requestToken()
+tokenQueue.process(requestToken)
+
+tokenQueue.on('completed', async function (job, result) {
+  const setAsync = promisify(client.set).bind(client)
+  await setAsync('access_token', result)
   logger.info(`Successfully updated access token`)
-  return job
 })
 
-logger.info(`Initializing events queue`)
-const eventQueue = new Queue('events', REDIS_URL)
-eventQueue.on('failed', handleError)
+tokenQueue.add({ repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
 
-/**
- * Adding a new event is done in 4 stages
- * - 1) check if event URL has previously been processed
- * - 2) (check if location is valid)
- * - 3) if aggregated via Facebook => retrieve details
- * - 4) post to endpoint
- * - 4) add to list of processed events
- */
-eventQueue.process(async function (job) {
-  const client = createClient()
+// Initialize events queue
+logger.info(`Initializing events queue`)
+const eventsQueue = new Queue('events', REDIS_URL)
+eventsQueue.on('failed', handleError)
+
+eventsQueue.process(processEvent)
+
+eventsQueue.on('active', async (job, jobPromise) => {
   const sismemberAsync = promisify(client.sismember).bind(client)
   let event = job.data
-  logger.debug(event)
-  logger.info(`Received event with url ${event.url}`)
 
   const count = await sismemberAsync('processed_events', event.url)
   if (count) {
-    throw new Error(`A event with url ${event.url} and name ${event.name} exists already.`)
+    logger.debug(`A event with url ${event.url} and name ${event.name} exists already.`)
+    jobPromise.cancel()
   }
-  const locations = await customHeaderRequest({
-    url: LOCATIONS_URL,
-    json: true
-  })
-  const location = locations.find((l) => l.name === event.location)
-  if (location === undefined) {
-    throw new Error(`Can't find a matching location with name ${event.location} for event ${event.url}`)
-  }
-  if (event.source.aggregator === 'Facebook') {
-    const archive = await facebook.loadFromSource(event.url)
-    const details = await facebook.transFormToEventDetails(archive)
-    event = {
-      ...event,
-      ...details
-    }
-  } else if (event.source.aggregator !== 'iCal') {
-    throw new Error('Unsupported aggregator.')
-  }
-  event.source = event.source.url
-  const saddAsync = promisify(client.sadd).bind(client)
-  await saddAsync('processed_events', event.url)
-  client.quit()
-  const response = await createEvents([event])
-  if (response.status === 409) {
-    throw new Error(`Event with url ${event.url} has previously been added to the API.`)
-  }
-  logger.info(`Successfully processed event with url ${event.url} and name ${event.name}`)
-  return job
 })
 
+eventsQueue.on('completed', async (job, result) => {
+  let event = result
+  const saddAsync = promisify(client.sadd).bind(client)
+  await saddAsync('processed_events', event.url)
+  try {
+    await createEvents([event], client)
+    logger.info(`Added event with url ${event.url} and name ${event.name}`)
+  } catch (err) {
+    if (err instanceof errors.StatusCodeError) {
+      logger.info(`Event with url ${event.url} has previously been added to the API.`)
+    } else {
+      logger.error(err)
+    }
+  }
+})
+
+// Initialize sources queue
 logger.info(`Initializing sources queue.`)
 const sourcesQueue = new Queue('sources', REDIS_URL)
 sourcesQueue.on('failed', handleError)
 
-/**
- * Fetching a source is done in 3 stages
- * 1) Fetching current source from sources key
- * 2) Use the current source and fetch info from iCal or Facebook
- * 3) Populate events with source info and add them (with increasing delay) to the events queue
- */
-sourcesQueue.process(async function (job) {
-  let source = await currentSource()
-  source = JSON.parse(source)
-  logger.info(`Fetching source of type ${source.aggregator} with URL ${source.url}`)
-  let events = []
-  if (source.aggregator === 'Facebook') {
-    let archive = await facebook.loadFromSource(source.url)
-    let items = await facebook.transFormToEventList(archive)
-    await Promise.all(items.map(async (item) => {
-      const event = await facebook.transFormToEvent(item)
-      events.push(event)
-      return event
-    }))
-  } else if (source.aggregator === 'iCal') {
-    const archive = await iCal.loadFromSource(source.url)
-    let items = iCal.transFormToEventList(archive)
-    await Promise.all(items.map(async (item) => {
-      let event = await iCal.transFormToEvent(item)
-      events.push(event)
-      return event
-    }))
-  } else {
-    throw (new Error(`Source of type ${source.aggregator} is currently not supported.`))
-  }
-  events.forEach((e) => {
-    e.source = source
+sourcesQueue.process(processSource)
+
+sourcesQueue.on('completed', (job, result) => {
+  result.forEach((event, index) => {
+    eventsQueue.add(event, {
+      delay: (5000 * index)
+    })
   })
-  logger.debug(`Fetched ${events.length} events and added them to the queue.`)
-  events.forEach((e, index) => {
-    eventQueue.add(e, { delay: index * 10000 })
-  })
-  return job
 })
 
-tokenQueue.add({ repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
-sourcesQueue.add({
+// Initialize current source queue
+logger.info(`Initializing current_source queue`)
+const currentSourceQueue = new Queue('current_source', REDIS_URL)
+currentSourceQueue.on('failed', handleError)
+
+currentSourceQueue.process(async () => {
+  return currentSource(client)
+})
+
+currentSourceQueue.on('completed', (job, result) => {
+  let source = JSON.parse(result)
+  sourcesQueue.add(source)
+})
+
+currentSourceQueue.add({
   repeat: { cron: '*/10 0,7-21 * * *' },
   timeout: 120000 // kill jobs after two minutes to prevent memory leaks
 }) // Every 10 minutes.
+
+process.on('SIGTERM', () => {
+  client.quit()
+  logger.info(`Cleaning up redis connection.`)
+})

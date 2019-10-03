@@ -1,7 +1,7 @@
 const process = require('process')
 const { promisify } = require('util')
 const request = require('./utils').customHeaderRequest
-const { createClient, ENDPOINT_URL } = require('./utils')
+const { ENDPOINT_URL } = require('./utils')
 
 const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
 
@@ -9,13 +9,12 @@ const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
  * Submits a list of events to the API server using credentials.
  * @function
  * @param {Array<Object>} events
+ * @param {Object} client
  * @return {Promise<any>}
  */
-async function createEvents (events) {
-  const client = createClient()
+async function createEvents (events, client) {
   const getAsync = promisify(client.get).bind(client)
   const token = await getAsync('access_token')
-  client.quit()
   const response = await request.post(`${ENDPOINT_URL}/events`, {
     auth: {
       bearer: token
@@ -51,10 +50,7 @@ async function requestToken () {
         grant_type: 'client_credentials'
       }
     })
-    const client = createClient()
-    const setAsync = promisify(client.set).bind(client)
-    await setAsync('access_token', response.access_token)
-    client.quit()
+    return response.access_token
   } else {
     throw new Error('CLIENT_ID or CLIENT_SECRET not specified!')
   }
