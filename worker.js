@@ -27,7 +27,7 @@ tokenQueue.on('completed', async function (job, result) {
   logger.info(`Successfully updated access token`)
 })
 
-tokenQueue.add({ repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
+tokenQueue.add(null, { repeat: { every: 35000 * 1000 } }) // Repeat every 35000 seconds = a little less than 10 hours
 
 // Initialize events queue
 logger.info(`Initializing events queue`)
@@ -100,6 +100,6 @@ currentSourceQueue.on('completed', (job, result) => {
   sourcesQueue.add(source)
 })
 
-currentSourceQueue.add({
+currentSourceQueue.add(null, {
   repeat: { cron: '*/10 0,7-21 * * *' }
 }) // Every 10 minutes.
