@@ -18,7 +18,7 @@ require('yargs') // eslint-disable-line
     yargs
       .positional('aggregator', {
         describe: 'The aggregation type',
-        choices: ['Facebook', 'iCal']
+        choices: ['Facebook', 'iCal', 'RSS']
       })
       .positional('url', {
         describe: 'The source url'

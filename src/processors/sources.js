@@ -1,5 +1,6 @@
 const iCal = require('../ical')
 const facebook = require('../facebook')
+const RSS = require('../rss')
 const logger = require('../logger')
 
 module.exports = async function (job) {
@@ -7,21 +8,17 @@ module.exports = async function (job) {
   logger.info(`Fetching source of type ${source.aggregator} with URL ${source.url}`)
   let events = []
   if (source.aggregator === 'Facebook') {
-    let archive = await facebook.loadFromSource(source.url)
-    let items = await facebook.transFormToEventList(archive)
-    await Promise.all(items.map(async (item) => {
-      const event = await facebook.transFormToEvent(item)
-      events.push(event)
-      return event
-    }))
+    const archive = await facebook.loadFromSource(source.url)
+    const items = await facebook.transFormToEventList(archive)
+    events = await Promise.all((items.map((item) => facebook.transFormToEvent(item))))
   } else if (source.aggregator === 'iCal') {
     const archive = await iCal.loadFromSource(source.url)
-    let items = iCal.transFormToEventList(archive)
-    await Promise.all(items.map(async (item) => {
-      let event = await iCal.transFormToEvent(item)
-      events.push(event)
-      return event
-    }))
+    const items = await iCal.transFormToEventList(archive)
+    events = await Promise.all(items.map((item) => iCal.transFormToEvent(item)))
+  } else if (source.aggregator === 'RSS') {
+    const feed = await RSS.loadFromSource(source.url)
+    const items = await RSS.transFormToEventList(feed)
+    events = await Promise.all(items.map((item) => RSS.transFormToEvent(item)))
   } else {
     throw (new Error(`Source of type ${source.aggregator} is currently not supported.`))
   }
