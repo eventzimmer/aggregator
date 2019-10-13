@@ -32,6 +32,32 @@ async function createEvents (events, client) {
 exports.createEvents = createEvents
 
 /**
+ * Submits a list events to the proposed_events table
+ * @param events
+ * @param client
+ * @return {Promise<*>}
+ */
+async function proposeEvents (events, client) {
+  const token = await client.get('access_token')
+  const response = await request.post(`${ENDPOINT_URL}/proposed_events`, {
+    auth: {
+      bearer: token
+    },
+    method: 'POST',
+    body: JSON.stringify(events),
+    headers: { 'Content-Type': 'application/json' },
+    resolveWithFullResponse: true
+  })
+  if (response.statusCode === 201) {
+    return response.body
+  } else {
+    throw new Error(response.body)
+  }
+}
+
+exports.proposeEvents = proposeEvents
+
+/**
  * Requests a token from the API and
  * NOTE: Make sure that CLIENT_ID and CLIENT_SECRET are set as environment variables.
  * @function
