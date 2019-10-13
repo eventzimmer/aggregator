@@ -1,4 +1,6 @@
 const request = require('../src/utils').customHeaderRequest
+const Parser = require('rss-parser');
+
 
 /**
  * Loads an RSS source
@@ -17,7 +19,9 @@ exports.loadFromSource = loadFromSource
  * @param {String} source
  */
 async function transFormToEventList (source) {
-  return null
+  const parser = new Parser()
+  const feed = await parser.parseString(source)
+  return feed.items
 }
 
 exports.transFormToEventList = transFormToEventList

@@ -14,7 +14,7 @@ describe('RSS', function () {
           done(err)
         } else {
           RSS.transFormToEventList(data.toString()).then((events) => {
-            expect(events).to.have.length(127)
+            expect(events).to.have.length(128)
             done()
           }).catch((err) => {
             done(err)
