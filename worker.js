@@ -3,8 +3,8 @@ const errors = require('request-promise-native/errors')
 
 const processSource = require('./src/processors/sources')
 const processEvent = require('./src/processors/events')
-const { createClient } = require('./src/utils')
-const { requestToken, createEvents } = require('./src/endpoint')
+const { createClient, customHeaderRequest, LOCATIONS_URL } = require('./src/utils')
+const { requestToken, createEvents, proposeEvents } = require('./src/endpoint')
 const { currentSource } = require('./src/sources')
 const logger = require('./src/logger')
 
@@ -55,7 +55,18 @@ eventsQueue.on('completed', async (job, result) => {
   const client = createClient()
   await client.sadd('processed_events', event.url)
   try {
-    await createEvents([event], client)
+    const locations = await customHeaderRequest({
+      url: `${LOCATIONS_URL}?${new URLSearchParams({
+        name: `eq.${event.location}`
+      }).toString()}`,
+      json: true
+    })
+    if (!locations.length) {
+      logger.info(`Can't find a matching location with name ${event.location} for event ${event.url}. Adding event to proposed events.`)
+      await proposeEvents([event], client)
+    } else {
+      await createEvents([event], client)
+    }
     logger.info(`Added event with url ${event.url} and name ${event.name}`)
   } catch (err) {
     if (err instanceof errors.StatusCodeError) {
