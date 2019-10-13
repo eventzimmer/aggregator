@@ -30,6 +30,7 @@
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
+    "rss-parser": "^3.7.2",
     "slug": "^1.1.0",
     "yargs": "^14.0.0"
   },
