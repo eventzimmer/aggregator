@@ -2,7 +2,7 @@ const process = require('process')
 const request = require('./utils').customHeaderRequest
 const { ENDPOINT_URL } = require('./utils')
 
-const AUTH_ENDPOINT = 'https://eventzimmer.eu.auth0.com/oauth/token'
+const AUTH_ENDPOINT = (process.env.AUTH_ENDPOINT !== undefined) ? process.env.AUTH_ENDPOINT : 'https://eventzimmer-staging.eu.auth0.com/oauth/token'
 
 /**
  * Submits a list of events to the API server using credentials.

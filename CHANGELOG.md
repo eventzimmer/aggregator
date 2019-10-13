@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added yargs based command line
 
 ### Changed
+- Use staging authentication by default
 - Moved from Travis to GitHub actions
 - Slugify iCalendar events if no URL is found
 - Use async-redis to get rid of promisify code
