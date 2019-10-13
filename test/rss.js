@@ -45,6 +45,5 @@ describe('RSS', function () {
         }
       })
     })
-
   })
 })

@@ -13,8 +13,8 @@ module.exports = async function (job) {
       ...event,
       ...details
     }
-  } else if (event.source.aggregator !== 'iCal') {
-    throw new Error('Unsupported aggregator.')
+  } else if (!['iCal', 'RSS'].includes(event.source.aggregator)) {
+    throw new Error(`Unsupported aggregator ${event.source.aggregator}.`)
   }
   event.source = event.source.url
   return event
