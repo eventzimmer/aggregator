@@ -30,8 +30,9 @@ describe('iCal', function () {
           done(err)
         } else {
           iCal.transFormToEventList(data.toString()).then((events) => {
-            events.forEach((event) => {
-              expect(event.getFirstPropertyValue('url')).to.include('https://www.google.com/')
+            events.forEach(async (event) => {
+              const transformedEvent = await iCal.transFormToEvent(event)
+              expect(transformedEvent.url).to.include('https://eventzimmer.de/')
             })
             done()
           }).catch((err) => {

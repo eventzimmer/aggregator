@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added yargs based command line
 
 ### Changed
+- Slugify iCalendar events if no URL is found
 - Use async-redis to get rid of promisify code
 - Use a fresh redis connection on every access and close once finished
 - Use vertical filtering to find location

@@ -1,5 +1,6 @@
 const request = require('../src/utils').customHeaderRequest
 const { parse, Component, Event } = require('ical.js')
+const slug = require('slug')
 
 /**
  * Loads an iCalendar source
@@ -23,17 +24,7 @@ exports.loadFromSource = loadFromSource
 async function transFormToEventList (source) {
   let vData = parse(source)
   let calendar = new Component(vData)
-  let prodid = calendar.getFirstPropertyValue('prodid')
-  if (prodid.includes('Google Inc') && prodid.includes('Google Calendar')) { // Add missing event URL's to Google calendar
-    let timezone = calendar.getFirstPropertyValue('x-wr-timezone')
-    return calendar.getAllSubcomponents().map((component) => {
-      let uid = component.getFirstPropertyValue('uid')
-      component.addPropertyWithValue('url', `https://www.google.com/calendar/event?eid=${uid}&ctz=${timezone}`)
-      return component
-    })
-  } else {
-    return calendar.getAllSubcomponents()
-  }
+  return calendar.getAllSubcomponents()
 }
 
 exports.transFormToEventList = transFormToEventList
@@ -46,6 +37,10 @@ exports.transFormToEventList = transFormToEventList
  */
 async function transFormToEvent (source) {
   let event = new Event(source)
+  if (!event.component.hasProperty('url')) {
+    const startDate = event.startDate.toJSDate()
+    event.component.addPropertyWithValue('url', `https://eventzimmer.de/${startDate.toISOString().slice(0, 10)}/${slug(event.summary)}`)
+  }
   let parentOrganizer = event.component.parent.getFirstPropertyValue('x-wr-calname')
   return {
     name: event.summary,
