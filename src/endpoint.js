@@ -59,25 +59,20 @@ exports.proposeEvents = proposeEvents
 
 /**
  * Requests a token from the API and
- * NOTE: Make sure that CLIENT_ID and CLIENT_SECRET are set as environment variables.
  * @function
  * @return {Promise<string> | Promise<null>}
  */
 async function requestToken () {
-  if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
-    const response = await request.post({
-      url: AUTH_ENDPOINT,
-      json: {
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        audience: 'api.eventzimmer.de',
-        grant_type: 'client_credentials'
-      }
-    })
-    return response.access_token
-  } else {
-    throw new Error('CLIENT_ID or CLIENT_SECRET not specified!')
-  }
+  const response = await request.post({
+    url: AUTH_ENDPOINT,
+    json: {
+      client_id: process.env.CLIENT_ID || 'hZxa9p8DN77eAlx5ZDAwH7EuRsvAGXRJ',
+      client_secret: process.env.CLIENT_SECRET || 'wLujykWeQBLTDanebhDlMsjyMj6O91BTMbbADPQWbk0hdkeQ3H9DyZ2u7t2FgFJQ',
+      audience: 'api.eventzimmer.de',
+      grant_type: 'client_credentials'
+    }
+  })
+  return response.access_token
 }
 
 exports.requestToken = requestToken
