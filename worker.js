@@ -13,6 +13,7 @@ const REDIS_URL = (process.env.REDIS_URL !== undefined) ? process.env.REDIS_URL 
 
 const QUEUE_CLIENT = new Redis(REDIS_URL)
 const QUEUE_SUBSCRIBER = new Redis(REDIS_URL)
+const AGGREGATOR = new Redis(REDIS_URL)
 
 const opts = {
   createClient: function (type) {
@@ -21,6 +22,8 @@ const opts = {
         return QUEUE_CLIENT
       case 'subscriber':
         return QUEUE_SUBSCRIBER
+      case 'aggregator':
+        return AGGREGATOR
       default:
         return new Redis(REDIS_URL)
     }
@@ -38,7 +41,7 @@ tokenQueue.on('failed', handleError)
 tokenQueue.process(requestToken)
 
 tokenQueue.on('completed', async function (job, result) {
-  const client = opts.createClient(null)
+  const client = opts.createClient('aggregator')
   await client.set('access_token', result)
   logger.info(`Successfully updated access token`)
 })
@@ -53,7 +56,7 @@ eventsQueue.on('failed', handleError)
 eventsQueue.process(processEvent)
 
 eventsQueue.on('active', async (job) => {
-  const client = opts.createClient(null)
+  const client = opts.createClient('aggregator')
   const event = job.data
 
   const count = await client.sismember('processed_events', event.url)
@@ -67,7 +70,7 @@ eventsQueue.on('active', async (job) => {
 
 eventsQueue.on('completed', async (job, result) => {
   let event = result
-  const client = opts.createClient(null)
+  const client = opts.createClient('aggregator')
   await client.sadd('processed_events', event.url)
   try {
     const locations = await customHeaderRequest({
@@ -113,9 +116,8 @@ const currentSourceQueue = new Queue('current_source', opts)
 currentSourceQueue.on('failed', handleError)
 
 currentSourceQueue.process(async () => {
-  const client = opts.createClient()
-  const source = await currentSource(client)
-  return source
+  const client = opts.createClient('aggregator')
+  return currentSource(client)
 })
 
 currentSourceQueue.on('completed', (job, result) => {
