@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added proposeEvents workflow
 - Added yargs based command line
+- Use connection pooling
 
 ### Changed
+- Use ioredis instead of redis + async redis
 - Use default CLIENT_ID and CLIENT_SECRET
 - Use staging authentication by default
 - Moved from Travis to GitHub actions
